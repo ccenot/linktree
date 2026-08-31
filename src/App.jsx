@@ -1299,8 +1299,10 @@ function App() {
   // ==================== RENDER PUBLIC LINKTREE INTERFACE ====================
   return (
     <>
-      <div className="ambient-glow-1"></div>
-      <div className="ambient-glow-2"></div>
+      <div className="ambient-background" aria-hidden="true">
+        <div className="ambient-glow-1"></div>
+        <div className="ambient-glow-2"></div>
+      </div>
       
       <div className="public-container animate-fade-in">
 
