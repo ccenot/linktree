@@ -310,7 +310,7 @@ function App() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
 
-  // --- FETCH FROM SUPABASE ON MOUNT ---
+  // --- FETCH FROM SUPABASE ON MOUNT & REALTIME SYNC ---
   useEffect(() => {
     const loadFromDb = async () => {
       try {
@@ -324,14 +324,28 @@ function App() {
         if (error) {
           console.error('Error fetching from Supabase:', error);
         } else if (data) {
-          setProfileName(data.profile_name || 'CENOT');
-          setProfileBio(data.profile_bio || 'powerd by SANS DISCORD SERVER');
-          setAvatarUrl(data.avatar_url || 'https://avatarfiles.alphacoders.com/174/174875.png');
-          setSlogan(data.slogan || 'aut vincere aut mori');
+          const pName = data.profile_name || 'CENOT';
+          const pBio = data.profile_bio || 'powerd by SANS DISCORD SERVER';
+          const pAvatar = data.avatar_url || 'https://avatarfiles.alphacoders.com/174/174875.png';
+          const pSlogan = data.slogan || 'aut vincere aut mori';
+          
+          setProfileName(pName);
+          setProfileBio(pBio);
+          setAvatarUrl(pAvatar);
+          setSlogan(pSlogan);
+
+          localStorage.setItem('shinigami_profileName', pName);
+          localStorage.setItem('shinigami_profileBio', pBio);
+          localStorage.setItem('shinigami_avatarUrl', pAvatar);
+          localStorage.setItem('shinigami_slogan', pSlogan);
+
           if (data.links) {
             const parsed = parseRawLinks(data.links);
             setBioLinks(parsed.bioLinks);
             setWebLinks(parsed.webLinks);
+            localStorage.setItem('shinigami_bio_links', JSON.stringify(parsed.bioLinks));
+            localStorage.setItem('shinigami_web_links', JSON.stringify(parsed.webLinks));
+            localStorage.setItem('shinigami_links', JSON.stringify(parsed));
           }
         }
       } catch (err) {
@@ -342,6 +356,58 @@ function App() {
     };
 
     loadFromDb();
+
+    // ⚡ Supabase Realtime Subscription: Instantly reflect changes when database updates
+    const channel = supabase
+      .channel('profile_config_realtime_sync')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profile_config', filter: 'id=eq.1' },
+        (payload) => {
+          if (payload.new) {
+            const data = payload.new;
+            const pName = data.profile_name || 'CENOT';
+            const pBio = data.profile_bio || 'powerd by SANS DISCORD SERVER';
+            const pAvatar = data.avatar_url || 'https://avatarfiles.alphacoders.com/174/174875.png';
+            const pSlogan = data.slogan || 'aut vincere aut mori';
+            
+            setProfileName(pName);
+            setProfileBio(pBio);
+            setAvatarUrl(pAvatar);
+            setSlogan(pSlogan);
+
+            localStorage.setItem('shinigami_profileName', pName);
+            localStorage.setItem('shinigami_profileBio', pBio);
+            localStorage.setItem('shinigami_avatarUrl', pAvatar);
+            localStorage.setItem('shinigami_slogan', pSlogan);
+
+            if (data.links) {
+              const parsed = parseRawLinks(data.links);
+              setBioLinks(parsed.bioLinks);
+              setWebLinks(parsed.webLinks);
+              localStorage.setItem('shinigami_bio_links', JSON.stringify(parsed.bioLinks));
+              localStorage.setItem('shinigami_web_links', JSON.stringify(parsed.webLinks));
+              localStorage.setItem('shinigami_links', JSON.stringify(parsed));
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    // Refetch latest DB data whenever tab becomes visible / focused
+    const handleFocus = () => {
+      if (document.visibilityState === 'visible') {
+        loadFromDb();
+      }
+    };
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleFocus);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleFocus);
+    };
   }, []);
 
   // --- AUTH STATE ---
@@ -750,7 +816,39 @@ function App() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.reload(true);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: '#84868c',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                fontSize: '12px',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              title="Bersihkan Cache & Refresh"
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.color = '#84868c';
+              }}
+            >
+              🧹 Clear Cache
+            </button>
+
             <button
               onClick={() => navigateTo('/')}
               style={{
