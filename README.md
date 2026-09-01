@@ -94,7 +94,7 @@ Access the admin dashboard at:
 http://localhost:5173/admin
 ```
 - **Default ID**: `cenot`
-- **Default Password**: `wahyu12tiga` *(Secured with SHA-256 validation)*
+- **Default Password**: `(password kamu)` *(Secured with SHA-256 validation)*
 
 ---
 

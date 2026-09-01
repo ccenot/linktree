@@ -212,7 +212,7 @@ async function sha256(message) {
   return hashHex;
 }
 
-// Precomputed SHA-256 hash for "wahyu12tiga"
+// Precomputed SHA-256 hash for admin authentication
 const HASHED_PASSWORD_TARGET = '653ad8673b17583c950b0d04d69f1cbd017ed0c66dbf8ce72c0ad8eef61e9a50';
 
 function App() {
