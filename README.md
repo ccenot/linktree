@@ -77,7 +77,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
 ### 4. Setup Database Schema (Supabase)
-Run the SQL script inside [supabase-setup.sql](./supabase-setup.sql) in your Supabase SQL Editor to initialize the `profile_config` table.
+Run the SQL script inside [supabase-setup.sql](./supabase-setup.sql) in your Supabase SQL Editor to initialize the `profile_config` and `admin_users` tables.
 
 ### 5. Run Local Development Server
 ```bash
@@ -93,8 +93,8 @@ Access the admin dashboard at:
 ```
 http://localhost:5173/admin
 ```
-- **Default ID**: `cenot`
-- **Default Password**: `(password kamu)` *(Secured with SHA-256 validation)*
+- **Kredensial Admin**: Divalidasi dan disimpan langsung di database Supabase (tabel `admin_users`) dengan enkripsi SHA-256.
+- **Pengaturan Akun**: ID Pengguna dan Kata Sandi dapat diubah langsung melalui form *"Keamanan & Akses Admin"* di dalam Dashboard Admin tanpa perlu mengubah kode sumber.
 
 ---
 

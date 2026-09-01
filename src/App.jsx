@@ -212,9 +212,6 @@ async function sha256(message) {
   return hashHex;
 }
 
-// Precomputed SHA-256 hash for admin authentication
-const HASHED_PASSWORD_TARGET = '653ad8673b17583c950b0d04d69f1cbd017ed0c66dbf8ce72c0ad8eef61e9a50';
-
 function App() {
   // --- CLIENT ROUTING ---
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -410,13 +407,47 @@ function App() {
     };
   }, []);
 
-  // --- AUTH STATE ---
+  // --- AUTH & SUPABASE ADMIN CREDENTIALS STATE ---
   const [usernameInput, setUsernameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem('shinigami_admin_auth') === 'true';
   });
+  const [currentAdminUser, setCurrentAdminUser] = useState(() => {
+    return sessionStorage.getItem('shinigami_admin_user') || 'cenot';
+  });
+
+  // Admin Credentials Change State
+  const [newAdminUser, setNewAdminUser] = useState('');
+  const [newAdminPass, setNewAdminPass] = useState('');
+  const [confirmAdminPass, setConfirmAdminPass] = useState('');
+  const [isUpdatingCreds, setIsUpdatingCreds] = useState(false);
+  const [credsStatus, setCredsStatus] = useState(''); // 'success' | 'error' | ''
+  const [credsMessage, setCredsMessage] = useState('');
+
+  // Load current admin username from Supabase upon authentication
+  useEffect(() => {
+    if (isAuthenticated) {
+      const loadAdminInfo = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('admin_users')
+            .select('username')
+            .limit(1);
+          if (data && data.length > 0 && data[0].username) {
+            setCurrentAdminUser(data[0].username);
+            setNewAdminUser(data[0].username);
+            sessionStorage.setItem('shinigami_admin_user', data[0].username);
+          }
+        } catch (err) {
+          console.error('Failed to load admin user info:', err);
+        }
+      };
+      loadAdminInfo();
+    }
+  }, [isAuthenticated]);
 
   // --- DRAG AND DROP STATE ---
   const [draggedItem, setDraggedItem] = useState(null); // { index, listType }
@@ -564,31 +595,124 @@ function App() {
     }
   };
 
-  // --- LOGIN SUBMIT ---
+  // --- LOGIN SUBMIT (VERIFIED AGAINST SUPABASE ADMIN_USERS) ---
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setAuthError('');
-    
-    if (usernameInput.toLowerCase() !== 'cenot') {
-      setAuthError('ID Pengguna atau Kata Sandi salah!');
+
+    const trimmedUser = usernameInput.trim();
+    if (!trimmedUser || !passwordInput) {
+      setAuthError('Silakan masukkan ID Pengguna dan Kata Sandi!');
       return;
     }
 
-    const hashedInput = await sha256(passwordInput);
-    if (hashedInput === HASHED_PASSWORD_TARGET) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('shinigami_admin_auth', 'true');
-      setAuthError('');
-      setPasswordInput('');
-      setUsernameInput('');
-    } else {
+    setIsAuthenticating(true);
+    try {
+      const hashedInput = await sha256(passwordInput);
+
+      // Query Supabase admin_users table
+      const { data, error } = await supabase
+        .from('admin_users')
+        .select('*')
+        .ilike('username', trimmedUser)
+        .limit(1);
+
+      if (error) {
+        console.error('Supabase auth error:', error);
+        setAuthError('Gagal menghubungkan ke database auth: ' + (error.message || 'Error'));
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const user = data[0];
+        if (user.password_hash === hashedInput) {
+          setIsAuthenticated(true);
+          setCurrentAdminUser(user.username);
+          setNewAdminUser(user.username);
+          sessionStorage.setItem('shinigami_admin_auth', 'true');
+          sessionStorage.setItem('shinigami_admin_user', user.username);
+          setAuthError('');
+          setPasswordInput('');
+          setUsernameInput('');
+          return;
+        }
+      }
+
       setAuthError('ID Pengguna atau Kata Sandi salah!');
+    } catch (err) {
+      console.error('Login error:', err);
+      setAuthError('Terjadi kesalahan saat memproses login: ' + (err.message || 'Error'));
+    } finally {
+      setIsAuthenticating(false);
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('shinigami_admin_auth');
+    sessionStorage.removeItem('shinigami_admin_user');
+  };
+
+  // --- UPDATE ADMIN CREDENTIALS IN SUPABASE ---
+  const handleUpdateAdminCredentials = async (e) => {
+    e.preventDefault();
+    setCredsStatus('');
+    setCredsMessage('');
+
+    const trimmedUser = newAdminUser.trim();
+    if (!trimmedUser) {
+      setCredsStatus('error');
+      setCredsMessage('Username tidak boleh kosong!');
+      return;
+    }
+
+    if (newAdminPass && newAdminPass.length < 6) {
+      setCredsStatus('error');
+      setCredsMessage('Kata sandi baru minimal 6 karakter!');
+      return;
+    }
+
+    if (newAdminPass && newAdminPass !== confirmAdminPass) {
+      setCredsStatus('error');
+      setCredsMessage('Konfirmasi kata sandi tidak cocok!');
+      return;
+    }
+
+    setIsUpdatingCreds(true);
+    try {
+      const updatePayload = {
+        username: trimmedUser,
+        updated_at: new Date().toISOString()
+      };
+
+      if (newAdminPass) {
+        updatePayload.password_hash = await sha256(newAdminPass);
+      }
+
+      const { error } = await supabase
+        .from('admin_users')
+        .update(updatePayload)
+        .eq('id', 1);
+
+      if (error) throw error;
+
+      setCurrentAdminUser(trimmedUser);
+      sessionStorage.setItem('shinigami_admin_user', trimmedUser);
+      setNewAdminPass('');
+      setConfirmAdminPass('');
+      setCredsStatus('success');
+      setCredsMessage('✓ Username & Kata Sandi berhasil diperbarui di Supabase!');
+      setTimeout(() => {
+        setCredsStatus('');
+        setCredsMessage('');
+      }, 5000);
+    } catch (err) {
+      console.error('Error updating credentials:', err);
+      setCredsStatus('error');
+      setCredsMessage('Gagal update database: ' + (err.message || 'Error'));
+    } finally {
+      setIsUpdatingCreds(false);
+    }
   };
 
   // ==================== RENDER SPIN WHEEL (GACHA) ====================
@@ -744,6 +868,7 @@ function App() {
 
               <button 
                 type="submit"
+                disabled={isAuthenticating}
                 style={{
                   backgroundColor: '#8b5cf6',
                   color: '#ffffff',
@@ -752,14 +877,19 @@ function App() {
                   padding: '14px',
                   fontSize: '14px',
                   fontWeight: '600',
-                  cursor: 'pointer',
+                  cursor: isAuthenticating ? 'not-allowed' : 'pointer',
                   transition: 'background-color 0.2s',
-                  marginTop: '10px'
+                  marginTop: '10px',
+                  opacity: isAuthenticating ? 0.7 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
                 }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#7c3aed'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#8b5cf6'}
+                onMouseOver={(e) => { if (!isAuthenticating) e.currentTarget.style.backgroundColor = '#7c3aed'; }}
+                onMouseOut={(e) => { if (!isAuthenticating) e.currentTarget.style.backgroundColor = '#8b5cf6'; }}
               >
-                Masuk Ke Panel
+                {isAuthenticating ? 'Memeriksa Database...' : 'Masuk Ke Panel'}
               </button>
             </form>
           </div>
@@ -812,7 +942,7 @@ function App() {
               Dashboard Admin
             </h2>
             <p style={{ margin: '2px 0 0 0', fontSize: '11.5px', color: '#84868c' }}>
-              Selamat datang, cenot!
+              Selamat datang, {currentAdminUser}!
             </p>
           </div>
 
@@ -1331,6 +1461,127 @@ function App() {
             >
               {isSaving ? 'Menyimpan...' : saveStatus === 'success' ? '✓ Tersimpan di DB' : saveStatus === 'error' ? '❌ Gagal Simpan' : 'Simpan ke Database'}
             </button>
+          </div>
+
+          {/* Admin Credentials Manager */}
+          <div style={{
+            backgroundColor: '#121316',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '20px',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)',
+            marginTop: '20px'
+          }}>
+            <div>
+              <h3 style={{ margin: 0, fontSize: '13px', fontWeight: '700', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                🔐 Keamanan & Akses Admin (Supabase DB)
+              </h3>
+              <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#84868c' }}>
+                Ubah ID Pengguna atau Kata Sandi admin yang tersimpan langsung di database Supabase.
+              </p>
+            </div>
+
+            <form onSubmit={handleUpdateAdminCredentials} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '11px', color: '#84868c', fontWeight: '500' }}>ID / Username Admin</label>
+                <input 
+                  type="text" 
+                  value={newAdminUser}
+                  onChange={(e) => setNewAdminUser(e.target.value)}
+                  placeholder="Username admin"
+                  required
+                  style={{
+                    backgroundColor: '#1c1d22',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '8px',
+                    padding: '10px 12px',
+                    color: '#ffffff',
+                    fontSize: '13px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '11px', color: '#84868c', fontWeight: '500' }}>Password Baru (Kosongkan jika tidak ganti)</label>
+                  <input 
+                    type="password" 
+                    value={newAdminPass}
+                    onChange={(e) => setNewAdminPass(e.target.value)}
+                    placeholder="Minimal 6 karakter"
+                    style={{
+                      backgroundColor: '#1c1d22',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '8px',
+                      padding: '10px 12px',
+                      color: '#ffffff',
+                      fontSize: '13px',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '11px', color: '#84868c', fontWeight: '500' }}>Konfirmasi Password Baru</label>
+                  <input 
+                    type="password" 
+                    value={confirmAdminPass}
+                    onChange={(e) => setConfirmAdminPass(e.target.value)}
+                    placeholder="Ulangi password baru"
+                    style={{
+                      backgroundColor: '#1c1d22',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '8px',
+                      padding: '10px 12px',
+                      color: '#ffffff',
+                      fontSize: '13px',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {credsStatus && (
+                <div style={{
+                  backgroundColor: credsStatus === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                  border: `1px solid ${credsStatus === 'success' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`,
+                  color: credsStatus === 'success' ? '#10b981' : '#ef4444',
+                  fontSize: '12.5px',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  textAlign: 'center'
+                }}>
+                  {credsMessage}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  type="submit"
+                  disabled={isUpdatingCreds}
+                  style={{
+                    backgroundColor: '#8b5cf6',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '10px 18px',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    cursor: isUpdatingCreds ? 'not-allowed' : 'pointer',
+                    transition: 'background-color 0.2s',
+                    opacity: isUpdatingCreds ? 0.7 : 1
+                  }}
+                  onMouseOver={(e) => { if (!isUpdatingCreds) e.currentTarget.style.backgroundColor = '#7c3aed'; }}
+                  onMouseOut={(e) => { if (!isUpdatingCreds) e.currentTarget.style.backgroundColor = '#8b5cf6'; }}
+                >
+                  {isUpdatingCreds ? 'Menyimpan Kredensial...' : 'Update Akun di Database'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
