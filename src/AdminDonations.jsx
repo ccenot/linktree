@@ -11,6 +11,16 @@ export default function AdminDonations() {
   const [copiedOverlay, setCopiedOverlay] = useState(false);
   const [testStatus, setTestStatus] = useState('');
 
+  // OBS Leaderboard Template Customizer State
+  const [obsLbPeriod, setObsLbPeriod] = useState('month');
+  const [obsLbLimit, setObsLbLimit] = useState(5);
+  const [obsLbTheme, setObsLbTheme] = useState('dark');
+  const [obsLbTitle, setObsLbTitle] = useState('TOP SULTAN');
+  const [copiedGeneratedUrl, setCopiedGeneratedUrl] = useState(false);
+
+  // Generated OBS URL
+  const generatedObsUrl = `https://notnot.store/overlay/leaderboard?period=${obsLbPeriod}&limit=${obsLbLimit}&theme=${obsLbTheme}${obsLbTitle !== 'TOP SULTAN' ? `&title=${encodeURIComponent(obsLbTitle)}` : ''}`;
+
   // Media Share Settings
   const [settings, setSettings] = useState({
     mediaShareEnabled: true,
@@ -201,6 +211,136 @@ export default function AdminDonations() {
           <span className="stat-label">TOTAL PENGUNJUNG DONATE</span>
           <span className="stat-value">{donations.length}</span>
           <span className="stat-sub">Invoice dibuat</span>
+        </div>
+      </div>
+
+      {/* OBS LEADERBOARD TEMPLATE GENERATOR & PREVIEW */}
+      <div className="admin-media-settings-card">
+        <div className="media-settings-header">
+          <div>
+            <h3 className="media-settings-title">👑 Template & URL Widget OBS Leaderboard</h3>
+            <p className="media-settings-desc">Kustomisasi tampilan widget Top Sultan untuk OBS Studio secara langsung (preview real-time).</p>
+          </div>
+          <button 
+            type="button" 
+            onClick={() => {
+              navigator.clipboard.writeText(generatedObsUrl);
+              setCopiedGeneratedUrl(true);
+              setTimeout(() => setCopiedGeneratedUrl(false), 2000);
+            }} 
+            className="save-settings-btn"
+            style={{ padding: '8px 14px' }}
+          >
+            {copiedGeneratedUrl ? '✓ URL Widget Tersalin!' : '📋 Salin URL Browser Source'}
+          </button>
+        </div>
+
+        {/* Customizer controls */}
+        <div className="media-settings-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          <div className="settings-field">
+            <label>Periode Waktu</label>
+            <select
+              value={obsLbPeriod}
+              onChange={(e) => setObsLbPeriod(e.target.value)}
+              className="search-input"
+              style={{ padding: '8px 10px', height: '37px', cursor: 'pointer' }}
+            >
+              <option value="month">Bulan Ini (Default)</option>
+              <option value="today">Hari Ini (Live Stream)</option>
+              <option value="all">Semua Waktu (All Time)</option>
+            </select>
+          </div>
+
+          <div className="settings-field">
+            <label>Jumlah Ranking Tampil</label>
+            <select
+              value={obsLbLimit}
+              onChange={(e) => setObsLbLimit(Number(e.target.value))}
+              className="search-input"
+              style={{ padding: '8px 10px', height: '37px', cursor: 'pointer' }}
+            >
+              <option value="3">Top 3 Sultan</option>
+              <option value="5">Top 5 Sultan</option>
+              <option value="10">Top 10 Sultan</option>
+            </select>
+          </div>
+
+          <div className="settings-field">
+            <label>Tema Tampilan Widget</label>
+            <select
+              value={obsLbTheme}
+              onChange={(e) => setObsLbTheme(e.target.value)}
+              className="search-input"
+              style={{ padding: '8px 10px', height: '37px', cursor: 'pointer' }}
+            >
+              <option value="dark">Dark Gold (Default)</option>
+              <option value="glass">Glassmorphism Blur</option>
+              <option value="compact">Compact / Mini Slim</option>
+            </select>
+          </div>
+
+          <div className="settings-field">
+            <label>Judul Header Kartu</label>
+            <input
+              type="text"
+              value={obsLbTitle}
+              onChange={(e) => setObsLbTitle(e.target.value)}
+              className="search-input"
+              style={{ padding: '8px 10px', height: '37px' }}
+              placeholder="TOP SULTAN"
+            />
+          </div>
+        </div>
+
+        {/* Generated URL Box & Quick Instructions */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          backgroundColor: '#0c0c0e',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          borderRadius: '12px',
+          padding: '14px 16px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <span style={{ fontSize: '12px', fontWeight: '700', color: '#f59e0b' }}>
+              URL Browser Source OBS:
+            </span>
+            <span style={{ fontSize: '11px', color: '#84868c' }}>
+              Rekomendasi Size OBS: <strong>Width: 380px</strong>, <strong>Height: 520px</strong>
+            </span>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            alignItems: 'center',
+            backgroundColor: '#18181c',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '8px',
+            padding: '8px 12px'
+          }}>
+            <code style={{ flex: 1, color: '#e4e4e7', fontSize: '12.5px', wordBreak: 'break-all', fontFamily: 'monospace' }}>
+              {generatedObsUrl}
+            </code>
+            <a
+              href={generatedObsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#f59e0b',
+                textDecoration: 'none',
+                fontSize: '12px',
+                fontWeight: '700',
+                padding: '4px 8px',
+                borderRadius: '6px',
+                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              ↗ Buka Preview
+            </a>
+          </div>
         </div>
       </div>
 
