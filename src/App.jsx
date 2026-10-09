@@ -3,6 +3,8 @@ import { BUILD_VERSION } from './version';
 import { createClient } from '@supabase/supabase-js';
 import SpinWheel from './SpinWheel';
 import JoinNetwork from './JoinNetwork';
+import DonatePage from './DonatePage';
+import OverlayPage from './OverlayPage';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -161,13 +163,13 @@ const DEFAULT_BIO_LINKS = [
   { title: 'MANGA', url: 'https://baca.notnot.store', iconType: 'book' },
   { title: 'PIALA DUNIA', url: 'https://bola.notnot.store', iconType: 'trophy' },
   { title: 'TikTok', url: 'https://www.tiktok.com/@ccenot', iconType: 'tiktok' },
-  { title: 'Donasi', url: 'https://saweria.co/cenot', iconType: 'coffee' },
+  { title: 'Donasi', url: '/donate', iconType: 'coffee' },
   { title: 'Discord', url: 'https://tr.ee/sans', iconType: 'discord' },
   { title: 'SPIN', url: '/spin', iconType: 'sparkles' },
 ];
 
 const DEFAULT_WEB_LINKS = [
-  { title: 'Donasi', url: 'https://saweria.co/cenot', iconType: 'coffee' },
+  { title: 'Donasi', url: '/donate', iconType: 'coffee' },
   { title: 'Discord', url: 'https://tr.ee/sans', iconType: 'discord' },
   { title: 'SPIN', url: '/spin', iconType: 'sparkles' },
 ];
@@ -718,6 +720,16 @@ function App() {
   // ==================== RENDER SPIN WHEEL (GACHA) ====================
   if (currentPath === '/spin') {
     return <SpinWheel onBack={() => navigateTo('/')} />;
+  }
+
+  // ==================== RENDER DONATE ====================
+  if (currentPath === '/donate' || currentPath.startsWith('/donate')) {
+    return <DonatePage onBack={() => navigateTo('/')} />;
+  }
+
+  // ==================== RENDER OBS OVERLAY ====================
+  if (currentPath === '/overlay' || currentPath.startsWith('/overlay')) {
+    return <OverlayPage />;
   }
 
   // ==================== RENDER JOIN NETWORK ====================
