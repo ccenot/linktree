@@ -1,0 +1,210 @@
+/* OBS Leaderboard Viewport (100% Transparent Background) */
+.obs-leaderboard-viewport {
+  width: 100vw;
+  height: 100vh;
+  background: transparent !important;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  color: #ffffff;
+}
+
+/* Base Card Container */
+.obs-lb-card {
+  width: 340px;
+  max-width: 100%;
+  background: rgba(14, 15, 18, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  border-radius: 18px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(245, 158, 11, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.obs-lb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 36, 0.05) 100%);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.obs-lb-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.obs-lb-icon {
+  font-size: 18px;
+}
+
+.obs-lb-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 850;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.obs-lb-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 2px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+/* Rows List */
+.obs-lb-list {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  gap: 6px;
+}
+
+.obs-lb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  gap: 10px;
+}
+
+/* Ranking highlights */
+.obs-lb-row.rank-1 {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.04) 100%);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+}
+
+.obs-lb-row.rank-2 {
+  background: linear-gradient(90deg, rgba(228, 228, 231, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(228, 228, 231, 0.3);
+}
+
+.obs-lb-row.rank-3 {
+  background: linear-gradient(90deg, rgba(217, 119, 36, 0.14) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(217, 119, 36, 0.3);
+}
+
+.obs-lb-rank {
+  font-size: 15px;
+  font-weight: 800;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+  color: #71717a;
+}
+
+.obs-lb-user {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.obs-lb-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f4f4f5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.obs-lb-times {
+  font-size: 10px;
+  color: #71717a;
+}
+
+.obs-lb-amount {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 850;
+  color: #f59e0b;
+  flex-shrink: 0;
+  letter-spacing: -0.2px;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+
+.obs-lb-empty {
+  padding: 24px 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #71717a;
+  font-style: italic;
+}
+
+/* Footer */
+.obs-lb-footer {
+  padding: 6px 14px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.obs-lb-brand {
+  font-size: 10px;
+  font-weight: 700;
+  color: #52525b;
+  letter-spacing: 0.5px;
+}
+
+/* =======================================
+   THEME VARIANTS
+   ======================================= */
+
+/* Glass Theme */
+.theme-glass .obs-lb-card {
+  background: rgba(18, 19, 23, 0.65);
+  backdrop-filter: blur(24px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Compact Theme */
+.theme-compact .obs-lb-card {
+  width: 270px;
+  border-radius: 12px;
+}
+
+.theme-compact .obs-lb-header {
+  padding: 8px 12px;
+}
+
+.theme-compact .obs-lb-title {
+  font-size: 13px;
+}
+
+.theme-compact .obs-lb-row {
+  padding: 6px 10px;
+}
+
+.theme-compact .obs-lb-name {
+  font-size: 12px;
+}
+
+.theme-compact .obs-lb-amount {
+  font-size: 12.5px;
+}

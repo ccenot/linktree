@@ -5,6 +5,7 @@ import SpinWheel from './SpinWheel';
 import JoinNetwork from './JoinNetwork';
 import DonatePage from './DonatePage';
 import OverlayPage from './OverlayPage';
+import OverlayLeaderboard from './OverlayLeaderboard';
 import AdminDonations from './AdminDonations';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -730,7 +731,11 @@ function App() {
     return <DonatePage onBack={() => navigateTo('/')} />;
   }
 
-  // ==================== RENDER OBS OVERLAY ====================
+  // ==================== RENDER OBS OVERLAYS ====================
+  if (currentPath === '/overlay/leaderboard' || currentPath.startsWith('/overlay/leaderboard')) {
+    return <OverlayLeaderboard />;
+  }
+
   if (currentPath === '/overlay' || currentPath.startsWith('/overlay')) {
     return <OverlayPage />;
   }

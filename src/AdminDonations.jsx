@@ -82,6 +82,12 @@ export default function AdminDonations() {
     setTimeout(() => setCopiedOverlay(false), 2000);
   };
 
+  const handleCopyLeaderboardOverlay = () => {
+    navigator.clipboard.writeText('https://notnot.store/overlay/leaderboard');
+    setCopiedOverlay('lb');
+    setTimeout(() => setCopiedOverlay(false), 2000);
+  };
+
   const handleTestAlert = async () => {
     try {
       setTestStatus('Mengirim...');
@@ -157,13 +163,19 @@ export default function AdminDonations() {
       {/* Top Banner / OBS Quick Links */}
       <div className="admin-obs-banner">
         <div className="obs-banner-info">
-          <div className="obs-badge">OBS STUDIO OVERLAY</div>
-          <span className="obs-url-text">https://notnot.store/overlay</span>
-          <p className="obs-hint">Pasang sebagai Browser Source di OBS (1920x1080) untuk alert suara TTS & video otomatis.</p>
+          <div className="obs-badge">OBS STUDIO OVERLAYS</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
+            <span className="obs-url-text">📢 Alert Pop-up: https://notnot.store/overlay</span>
+            <span className="obs-url-text" style={{ color: '#f59e0b' }}>🏆 Top Sultan Widget: https://notnot.store/overlay/leaderboard</span>
+          </div>
+          <p className="obs-hint">Pasang sebagai Browser Source di OBS (background 100% transparan, update realtime otomatis).</p>
         </div>
         <div className="obs-banner-actions">
           <button onClick={handleCopyOverlayUrl} className="obs-action-btn">
-            {copiedOverlay ? '✓ URL Tersalin!' : '📋 Salin Link OBS'}
+            {copiedOverlay === true ? '✓ Alert Tersalin!' : '📋 Link Alert OBS'}
+          </button>
+          <button onClick={handleCopyLeaderboardOverlay} className="obs-action-btn">
+            {copiedOverlay === 'lb' ? '✓ Leaderboard Tersalin!' : '👑 Link Leaderboard OBS'}
           </button>
           <button onClick={handleTestAlert} className="obs-action-btn primary">
             {testStatus || '🔔 Test Alert OBS'}
