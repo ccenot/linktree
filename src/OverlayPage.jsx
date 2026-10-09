@@ -116,38 +116,44 @@ export default function OverlayPage() {
 
   // Process Queue
   useEffect(() => {
-    if (queue.length === 0 || isProcessingRef.current) return;
+    if (!activeAlert && queue.length > 0) {
+      const next = queue[0];
+      setQueue(prev => prev.slice(1));
+      setActiveAlert(next);
+    }
+  }, [queue, activeAlert]);
 
-    isProcessingRef.current = true;
-    const current = queue[0];
-    setActiveAlert(current);
-    setQueue(prev => prev.slice(1));
+  // Alert Timer & Sound
+  useEffect(() => {
+    if (!activeAlert) return;
 
     // Play chime
     playChime();
 
     // Prepare speech text
-    const ttsText = current.message 
-      ? `${current.donatorName} menyawer Rp ${current.amount.toLocaleString('id-ID')}. Pesan: ${current.message}`
-      : `${current.donatorName} menyawer Rp ${current.amount.toLocaleString('id-ID')}!`;
+    const ttsText = activeAlert.message 
+      ? `${activeAlert.donatorName} menyawer Rp ${activeAlert.amount.toLocaleString('id-ID')}. Pesan: ${activeAlert.message}`
+      : `${activeAlert.donatorName} menyawer Rp ${activeAlert.amount.toLocaleString('id-ID')}!`;
 
     // Speak after chime starts
-    setTimeout(() => {
+    const ttsTimer = setTimeout(() => {
       speakTTS(ttsText);
     }, 600);
 
     // Duration: compact test alert (8s), normal video (15s), text only (9s)
-    const ytId = getYouTubeId(current.mediaUrl);
-    const isTest = Boolean(current.id && String(current.id).startsWith('TEST-'));
+    const ytId = getYouTubeId(activeAlert.mediaUrl);
+    const isTest = Boolean(activeAlert.id && String(activeAlert.id).startsWith('TEST-'));
     const displayDuration = isTest ? 8000 : (ytId ? 15000 : 9000);
 
-    const timeout = setTimeout(() => {
+    const timer = setTimeout(() => {
       setActiveAlert(null);
-      isProcessingRef.current = false;
     }, displayDuration);
 
-    return () => clearTimeout(timeout);
-  }, [queue]);
+    return () => {
+      clearTimeout(ttsTimer);
+      clearTimeout(timer);
+    };
+  }, [activeAlert]);
 
   const ytVideoId = activeAlert ? getYouTubeId(activeAlert.mediaUrl) : null;
 
