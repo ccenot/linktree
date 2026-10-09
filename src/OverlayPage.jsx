@@ -70,14 +70,12 @@ export default function OverlayPage() {
 
   // Isolate transparent background only when on overlay route
   useEffect(() => {
-    const prevBodyBg = document.body.style.backgroundColor;
-    const prevHtmlBg = document.documentElement.style.backgroundColor;
-    document.body.style.backgroundColor = 'transparent';
-    document.documentElement.style.backgroundColor = 'transparent';
+    document.documentElement.classList.add('is-overlay');
+    document.body.classList.add('is-overlay');
 
     return () => {
-      document.body.style.backgroundColor = prevBodyBg || '#0b0c0e';
-      document.documentElement.style.backgroundColor = prevHtmlBg || '#0b0c0e';
+      document.documentElement.classList.remove('is-overlay');
+      document.body.classList.remove('is-overlay');
     };
   }, []);
 
@@ -150,38 +148,10 @@ export default function OverlayPage() {
     return () => clearTimeout(timeout);
   }, [queue]);
 
-  const handleTestTrigger = async () => {
-    try {
-      await fetch(`${API_BASE}/api/public/overlay/test`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Sultan Dermawan',
-          amount: 50000,
-          message: 'Semangat terus bang Cenot! Kontennya daging semua.',
-          mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        })
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const ytVideoId = activeAlert ? getYouTubeId(activeAlert.mediaUrl) : null;
 
   return (
     <div className="overlay-viewport">
-      
-      {/* Discreet floating helper (only visible if hovering on top-left) */}
-      <div className="overlay-test-widget">
-        <span className={`status-pill ${isConnected ? 'online' : 'offline'}`}>
-          {isConnected ? 'LIVE CONNECTED' : 'CONNECTING...'}
-        </span>
-        <button onClick={handleTestTrigger} className="test-btn">
-          Test Saweran Alert
-        </button>
-      </div>
-
       {/* POPUP ALERT CONTAINER */}
       {activeAlert && (
         <div className="alert-card-container animate-slide-in">
