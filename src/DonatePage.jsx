@@ -13,6 +13,7 @@ const PRESET_AMOUNTS = [
 
 export default function DonatePage({ onBack }) {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [selectedAmount, setSelectedAmount] = useState(10000);
   const [customAmount, setCustomAmount] = useState('');
   const [message, setMessage] = useState('');
@@ -77,6 +78,11 @@ export default function DonatePage({ onBack }) {
       return;
     }
 
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMsg('Harap masukkan alamat email yang valid.');
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       const res = await fetch(`${API_BASE}/api/public/donate`, {
@@ -84,6 +90,7 @@ export default function DonatePage({ onBack }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim() || 'Anonim',
+          email: email.trim(),
           amount: finalAmount,
           message: message.trim(),
           mediaUrl: mediaUrl.trim()
@@ -200,6 +207,19 @@ export default function DonatePage({ onBack }) {
                   placeholder="Nama atau samaran (kosongkan untuk Anonim)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="form-group">
+                <label className="form-label">Email Pengirim <span style={{ color: '#ef4444' }}>*</span></label>
+                <input
+                  type="email"
+                  required
+                  placeholder="nama@email.com (agar admin bisa hubungi kamu)"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="form-input"
                 />
               </div>

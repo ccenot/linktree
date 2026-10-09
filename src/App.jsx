@@ -5,6 +5,7 @@ import SpinWheel from './SpinWheel';
 import JoinNetwork from './JoinNetwork';
 import DonatePage from './DonatePage';
 import OverlayPage from './OverlayPage';
+import AdminDonations from './AdminDonations';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -301,6 +302,8 @@ function App() {
 
   // Admin Tab active ('bio' | 'web')
   const [adminTab, setAdminTab] = useState('bio');
+  // Admin Section ('profile' | 'donations')
+  const [adminSection, setAdminSection] = useState('donations');
   // Mobile Public Tab active ('bio' | 'web')
   const [publicActiveTab, setPublicActiveTab] = useState('bio');
 
@@ -930,7 +933,7 @@ function App() {
     return (
       <div style={{
         width: '100%',
-        maxWidth: '560px',
+        maxWidth: adminSection === 'donations' ? '1080px' : '560px',
         margin: '0 auto',
         padding: '24px 16px',
         boxSizing: 'border-box',
@@ -943,7 +946,7 @@ function App() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px',
+          marginBottom: '20px',
           backgroundColor: '#121316',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           borderRadius: '16px',
@@ -1035,7 +1038,64 @@ function App() {
           </div>
         </div>
 
-        {/* Form Editor */}
+        {/* Section Tabs Switcher */}
+        <div style={{
+          display: 'flex',
+          gap: '8px',
+          marginBottom: '20px',
+          backgroundColor: '#121316',
+          padding: '6px',
+          borderRadius: '12px',
+          border: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
+          <button
+            onClick={() => setAdminSection('donations')}
+            style={{
+              flex: 1,
+              padding: '10px 16px',
+              borderRadius: '8px',
+              border: '1px solid ' + (adminSection === 'donations' ? '#f59e0b' : 'transparent'),
+              backgroundColor: adminSection === 'donations' ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
+              color: adminSection === 'donations' ? '#f59e0b' : '#84868c',
+              fontWeight: '700',
+              fontSize: '13px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}
+          >
+            💰 Kelola Saweran (Saweria)
+          </button>
+          <button
+            onClick={() => setAdminSection('profile')}
+            style={{
+              flex: 1,
+              padding: '10px 16px',
+              borderRadius: '8px',
+              border: '1px solid ' + (adminSection === 'profile' ? '#8b5cf6' : 'transparent'),
+              backgroundColor: adminSection === 'profile' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+              color: adminSection === 'profile' ? '#8b5cf6' : '#84868c',
+              fontWeight: '700',
+              fontSize: '13px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}
+          >
+            ⚙️ Linktree Editor
+          </button>
+        </div>
+
+        {adminSection === 'donations' ? (
+          <AdminDonations />
+        ) : (
+        /* Form Editor */
         <div style={{
           backgroundColor: '#121316',
           border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -1596,6 +1656,7 @@ function App() {
             </form>
           </div>
         </div>
+        )}
       </div>
     );
   }
