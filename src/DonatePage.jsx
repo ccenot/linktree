@@ -21,6 +21,23 @@ export default function DonatePage({ onBack }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Media Share Settings from server
+  const [settings, setSettings] = useState({
+    mediaShareEnabled: true,
+    minAmountForMedia: 10000,
+    secPerThousand: 3,
+    maxDurationSec: 60
+  });
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/public/donation-settings`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.settings) setSettings(data.settings);
+      })
+      .catch(console.error);
+  }, []);
+
   // Active Checkout State
   const [checkout, setCheckout] = useState(null);
   const [timeLeft, setTimeLeft] = useState(900); // 15 mins in sec
@@ -241,20 +258,36 @@ export default function DonatePage({ onBack }) {
               </div>
 
               {/* Media Share */}
-              <div className="form-group">
-                <div className="form-label-row">
-                  <label className="form-label">Media Share (Opsional)</label>
-                  <span className="optional-tag">YouTube</span>
+              {settings.mediaShareEnabled && (
+                <div className="form-group">
+                  <div className="form-label-row">
+                    <label className="form-label">Media Share (Opsional)</label>
+                    <span className="optional-tag">YouTube</span>
+                  </div>
+                  <input
+                    type="url"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    value={mediaUrl}
+                    onChange={(e) => setMediaUrl(e.target.value)}
+                    className="form-input"
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
+                    <span className="input-hint">
+                      Tarif: Min. Rp {settings.minAmountForMedia.toLocaleString('id-ID')} ({settings.secPerThousand} dtk/Rp 1.000, maks. {settings.maxDurationSec} dtk).
+                    </span>
+                    {mediaUrl && finalAmount < settings.minAmountForMedia && (
+                      <span style={{ fontSize: '12px', color: '#f59e0b', fontWeight: '600' }}>
+                        ⚠️ Naikkan nominal minimal Rp {settings.minAmountForMedia.toLocaleString('id-ID')} agar video bisa diputar di stream.
+                      </span>
+                    )}
+                    {mediaUrl && finalAmount >= settings.minAmountForMedia && (
+                      <span style={{ fontSize: '12px', color: '#10b981', fontWeight: '600' }}>
+                        ✓ Estimasi durasi putar di stream: {Math.min(settings.maxDurationSec, Math.floor((finalAmount / 1000) * settings.secPerThousand))} detik.
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <input
-                  type="url"
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  value={mediaUrl}
-                  onChange={(e) => setMediaUrl(e.target.value)}
-                  className="form-input"
-                />
-                <span className="input-hint">Video bakal otomatis keputar di layar stream penonton.</span>
-              </div>
+              )}
 
               {/* Submit Button */}
               <button

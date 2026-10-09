@@ -11,6 +11,48 @@ export default function AdminDonations() {
   const [copiedOverlay, setCopiedOverlay] = useState(false);
   const [testStatus, setTestStatus] = useState('');
 
+  // Media Share Settings
+  const [settings, setSettings] = useState({
+    mediaShareEnabled: true,
+    minAmountForMedia: 10000,
+    secPerThousand: 3,
+    maxDurationSec: 60
+  });
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsSavedMsg, setSettingsSavedMsg] = useState('');
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/public/donation-settings`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.settings) setSettings(data.settings);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSaveSettings = async (e) => {
+    e.preventDefault();
+    try {
+      setIsSavingSettings(true);
+      const res = await fetch(`${API_BASE}/api/public/donation-settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings)
+      });
+      if (res.ok) {
+        setSettingsSavedMsg('✓ Pengaturan Tersimpan!');
+        setTimeout(() => setSettingsSavedMsg(''), 2500);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
   const fetchDonations = async () => {
     try {
       setIsLoading(true);
@@ -28,6 +70,7 @@ export default function AdminDonations() {
 
   useEffect(() => {
     fetchDonations();
+    fetchSettings();
     // Auto refresh every 15s
     const interval = setInterval(fetchDonations, 15000);
     return () => clearInterval(interval);
@@ -148,6 +191,79 @@ export default function AdminDonations() {
           <span className="stat-sub">Invoice dibuat</span>
         </div>
       </div>
+
+      {/* Media Share Settings Form Card */}
+      <form onSubmit={handleSaveSettings} className="admin-media-settings-card">
+        <div className="media-settings-header">
+          <div>
+            <h3 className="media-settings-title">⚙️ Aturan Media Share (Anti-Spam Video)</h3>
+            <p className="media-settings-desc">Atur tarif durasi video per saweran dan batasi durasi maksimal agar live stream tidak dispam.</p>
+          </div>
+          <div className="toggle-wrapper">
+            <label className="switch-label">
+              <input
+                type="checkbox"
+                checked={settings.mediaShareEnabled}
+                onChange={(e) => setSettings(prev => ({ ...prev, mediaShareEnabled: e.target.checked }))}
+              />
+              <span className="switch-text">{settings.mediaShareEnabled ? '✓ Media Share Aktif' : 'Nonaktif'}</span>
+            </label>
+          </div>
+        </div>
+
+        <div className="media-settings-grid">
+          <div className="settings-field">
+            <label>Min. Donasi untuk Video</label>
+            <div className="input-with-prefix">
+              <span>Rp</span>
+              <input
+                type="number"
+                min="1000"
+                step="1000"
+                value={settings.minAmountForMedia}
+                onChange={(e) => setSettings(prev => ({ ...prev, minAmountForMedia: Number(e.target.value) }))}
+              />
+            </div>
+          </div>
+
+          <div className="settings-field">
+            <label>Durasi per Rp 1.000</label>
+            <div className="input-with-suffix">
+              <input
+                type="number"
+                min="1"
+                max="60"
+                value={settings.secPerThousand}
+                onChange={(e) => setSettings(prev => ({ ...prev, secPerThousand: Number(e.target.value) }))}
+              />
+              <span>detik</span>
+            </div>
+            <small className="field-hint">Rp 10.000 = {settings.secPerThousand * 10} detik</small>
+          </div>
+
+          <div className="settings-field">
+            <label>Batas Maks. Video (Anti-Spam)</label>
+            <div className="input-with-suffix">
+              <input
+                type="number"
+                min="5"
+                max="300"
+                value={settings.maxDurationSec}
+                onChange={(e) => setSettings(prev => ({ ...prev, maxDurationSec: Number(e.target.value) }))}
+              />
+              <span>detik</span>
+            </div>
+            <small className="field-hint">Maks. {Math.round(settings.maxDurationSec / 60 * 10) / 10} menit</small>
+          </div>
+
+          <div className="settings-action-col">
+            <button type="submit" disabled={isSavingSettings} className="save-settings-btn">
+              {isSavingSettings ? 'Menyimpan...' : '💾 Simpan Aturan'}
+            </button>
+            {settingsSavedMsg && <span className="settings-saved-badge">{settingsSavedMsg}</span>}
+          </div>
+        </div>
+      </form>
 
       {/* Filter and Search Bar */}
       <div className="admin-table-controls">

@@ -140,10 +140,18 @@ export default function OverlayPage() {
       speakTTS(ttsText);
     }, 600);
 
-    // Duration: compact test alert (8s), normal video (15s), text only (9s)
+    // Duration: compact test alert (8s), dynamic video duration based on donation (capped at max), text only (9s)
     const ytId = getYouTubeId(activeAlert.mediaUrl);
     const isTest = Boolean(activeAlert.id && String(activeAlert.id).startsWith('TEST-'));
-    const displayDuration = isTest ? 8000 : (ytId ? 15000 : 9000);
+    
+    let displayDuration = 9000;
+    if (isTest) {
+      displayDuration = 8000;
+    } else if (ytId) {
+      displayDuration = activeAlert.durationSec 
+        ? activeAlert.durationSec * 1000 
+        : Math.min(60000, Math.max(10000, Math.floor((activeAlert.amount / 1000) * 3) * 1000));
+    }
 
     const timer = setTimeout(() => {
       setActiveAlert(null);
