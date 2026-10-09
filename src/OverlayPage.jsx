@@ -136,9 +136,10 @@ export default function OverlayPage() {
       speakTTS(ttsText);
     }, 600);
 
-    // Duration: video duration or 12 seconds
+    // Duration: compact test alert (8s), normal video (15s), text only (9s)
     const ytId = getYouTubeId(current.mediaUrl);
-    const displayDuration = ytId ? 30000 : 12000;
+    const isTest = Boolean(current.id && String(current.id).startsWith('TEST-'));
+    const displayDuration = isTest ? 8000 : (ytId ? 15000 : 9000);
 
     const timeout = setTimeout(() => {
       setActiveAlert(null);
