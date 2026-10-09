@@ -68,6 +68,19 @@ export default function OverlayPage() {
   const [isConnected, setIsConnected] = useState(false);
   const isProcessingRef = useRef(false);
 
+  // Isolate transparent background only when on overlay route
+  useEffect(() => {
+    const prevBodyBg = document.body.style.backgroundColor;
+    const prevHtmlBg = document.documentElement.style.backgroundColor;
+    document.body.style.backgroundColor = 'transparent';
+    document.documentElement.style.backgroundColor = 'transparent';
+
+    return () => {
+      document.body.style.backgroundColor = prevBodyBg || '#0b0c0e';
+      document.documentElement.style.backgroundColor = prevHtmlBg || '#0b0c0e';
+    };
+  }, []);
+
   // Connect to SSE stream
   useEffect(() => {
     let evtSource = null;

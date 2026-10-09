@@ -1,8 +1,4 @@
-/* OBS Browser Source Viewport (100% Transparent) */
-html, body {
-  background: transparent !important;
-}
-
+/* OBS Browser Source Viewport */
 .overlay-viewport {
   width: 100vw;
   height: 100vh;
