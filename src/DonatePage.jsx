@@ -12,6 +12,11 @@ const PRESET_AMOUNTS = [
 ];
 
 export default function DonatePage({ onBack }) {
+  const [activeTab, setActiveTab] = useState('donate'); // 'donate' | 'leaderboard'
+  const [leaderboardPeriod, setLeaderboardPeriod] = useState('all'); // 'all' | 'month' | 'today'
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [selectedAmount, setSelectedAmount] = useState(10000);
@@ -29,6 +34,21 @@ export default function DonatePage({ onBack }) {
     maxDurationSec: 60
   });
 
+  const fetchLeaderboard = async (period = 'all') => {
+    try {
+      setLoadingLeaderboard(true);
+      const res = await fetch(`${API_BASE}/api/public/leaderboard?period=${period}`);
+      if (res.ok) {
+        const data = await res.json();
+        setLeaderboard(data.leaderboard || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingLeaderboard(false);
+    }
+  };
+
   useEffect(() => {
     fetch(`${API_BASE}/api/public/donation-settings`)
       .then(res => res.json())
@@ -37,6 +57,12 @@ export default function DonatePage({ onBack }) {
       })
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'leaderboard') {
+      fetchLeaderboard(leaderboardPeriod);
+    }
+  }, [activeTab, leaderboardPeriod]);
 
   // Active Checkout State
   const [checkout, setCheckout] = useState(null);
@@ -174,6 +200,90 @@ export default function DonatePage({ onBack }) {
               </p>
             </div>
 
+            {/* View Switcher Tabs (Sawer vs Leaderboard) */}
+            <div className="donate-tab-switcher">
+              <button
+                type="button"
+                className={`tab-switch-btn ${activeTab === 'donate' ? 'active' : ''}`}
+                onClick={() => setActiveTab('donate')}
+              >
+                💖 Kirim Saweran
+              </button>
+              <button
+                type="button"
+                className={`tab-switch-btn ${activeTab === 'leaderboard' ? 'active' : ''}`}
+                onClick={() => setActiveTab('leaderboard')}
+              >
+                🏆 Top Sultan
+              </button>
+            </div>
+
+            {activeTab === 'leaderboard' ? (
+              <div className="leaderboard-view animate-fade-in">
+                {/* Period Selector */}
+                <div className="period-pills">
+                  <button
+                    type="button"
+                    className={`period-btn ${leaderboardPeriod === 'all' ? 'active' : ''}`}
+                    onClick={() => setLeaderboardPeriod('all')}
+                  >
+                    Semua Waktu
+                  </button>
+                  <button
+                    type="button"
+                    className={`period-btn ${leaderboardPeriod === 'month' ? 'active' : ''}`}
+                    onClick={() => setLeaderboardPeriod('month')}
+                  >
+                    Bulan Ini
+                  </button>
+                  <button
+                    type="button"
+                    className={`period-btn ${leaderboardPeriod === 'today' ? 'active' : ''}`}
+                    onClick={() => setLeaderboardPeriod('today')}
+                  >
+                    Hari Ini
+                  </button>
+                </div>
+
+                {loadingLeaderboard ? (
+                  <div className="lb-loading">Memuat peringkat sultan...</div>
+                ) : leaderboard.length === 0 ? (
+                  <div className="lb-empty">
+                    <span className="lb-empty-icon">👑</span>
+                    <p className="lb-empty-title">Belum ada saweran di periode ini</p>
+                    <p className="lb-empty-sub">Jadilah orang pertama yang muncul di Top Leaderboard!</p>
+                    <button
+                      type="button"
+                      className="donate-submit-btn"
+                      style={{ marginTop: '16px' }}
+                      onClick={() => setActiveTab('donate')}
+                    >
+                      Sawer Sekarang
+                    </button>
+                  </div>
+                ) : (
+                  <div className="lb-list">
+                    {leaderboard.map((user, idx) => {
+                      const rank = idx + 1;
+                      const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                      return (
+                        <div key={idx} className={`lb-item rank-${rank}`}>
+                          <div className="lb-rank-badge">{medal}</div>
+                          <div className="lb-user-info">
+                            <span className="lb-username">{user.name}</span>
+                            <span className="lb-count">{user.count}x saweran</span>
+                          </div>
+                          <div className="lb-amount">
+                            <span>Rp {Number(user.total_amount).toLocaleString('id-ID')}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
             {errorMsg && (
               <div className="donate-alert-error">
                 {errorMsg}
@@ -308,6 +418,8 @@ export default function DonatePage({ onBack }) {
                 )}
               </button>
             </form>
+            </>
+            )}
           </div>
         )}
 

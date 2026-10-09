@@ -81,7 +81,161 @@
 
 .donate-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+}
+
+/* Tab Switcher */
+.donate-tab-switcher {
+  display: flex;
+  background: #1c1c22;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 20px;
+  gap: 4px;
+}
+
+.tab-switch-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #a1a1aa;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-switch-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+/* Leaderboard View */
+.leaderboard-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.period-pills {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.period-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a1a1aa;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.period-btn.active {
+  background: #f59e0b;
+  color: #000000;
+  border-color: #f59e0b;
+}
+
+.lb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lb-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1c1c22;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 12px 16px;
+  gap: 12px;
+}
+
+.lb-item.rank-1 {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, #1c1c22 100%);
+}
+
+.lb-item.rank-2 {
+  border-color: rgba(228, 228, 231, 0.3);
+}
+
+.lb-item.rank-3 {
+  border-color: rgba(217, 119, 36, 0.3);
+}
+
+.lb-rank-badge {
+  font-size: 18px;
+  font-weight: 800;
+  width: 28px;
+  text-align: center;
+  color: #71717a;
+}
+
+.lb-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-username {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.lb-count {
+  font-size: 11px;
+  color: #71717a;
+}
+
+.lb-amount {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.lb-empty {
+  text-align: center;
+  padding: 30px 16px;
+}
+
+.lb-empty-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.lb-empty-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.lb-empty-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #84868c;
+}
+
+.lb-loading {
+  text-align: center;
+  padding: 30px;
+  color: #71717a;
+  font-size: 13px;
 }
 
 .donate-avatar {
