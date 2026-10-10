@@ -216,7 +216,6 @@ export default function DonatePage({ onBack }) {
               <div className="donate-milestone-box">
                 <div className="dm-header">
                   <div className="dm-left">
-                    <FlyingCoinIcon size={20} />
                     <span className="dm-title">{milestone.title}</span>
                   </div>
                   <span className="dm-pct">{milestone.percentage}%</span>

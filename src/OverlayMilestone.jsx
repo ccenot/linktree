@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './OverlayMilestone.css';
-import FlyingCoinIcon from './FlyingCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
@@ -92,7 +91,6 @@ export default function OverlayMilestone() {
           <div className="slim-progress-fill" style={{ width: `${percentage}%` }}></div>
           <div className="slim-content">
             <div className="slim-left">
-              <FlyingCoinIcon size={20} />
               <span className="slim-title">{title}</span>
             </div>
             <div className="slim-right">
@@ -114,7 +112,6 @@ export default function OverlayMilestone() {
         {/* Header */}
         <div className="obs-ms-header">
           <div className="obs-ms-header-left">
-            <FlyingCoinIcon size={24} />
             <span className="obs-ms-title">{title}</span>
           </div>
           <span className="obs-ms-pct">{percentage}%</span>
