@@ -1,7 +1,7 @@
 .donate-wrapper {
   min-height: 100vh;
-  background-color: #0c0c0e;
-  color: #f4f4f5;
+  background-color: #0f121d;
+  color: #f8fafc;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 24px 16px 60px;
   box-sizing: border-box;
@@ -29,9 +29,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e4e4e7;
+  background: rgba(49, 58, 98, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  color: #e2e8f0;
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 14px;
@@ -41,8 +41,9 @@
 }
 
 .donate-back-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(49, 58, 98, 0.6);
   color: #ffffff;
+  border-color: #60a5fa;
   transform: translateX(-2px);
 }
 
@@ -57,26 +58,27 @@
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  color: #a1a1aa;
+  color: #94a3b8;
 }
 
 .donate-brand-badge {
-  background: #f59e0b;
-  color: #000000;
+  background: #313a62;
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.4);
   font-size: 10px;
   font-weight: 800;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
   letter-spacing: 0.5px;
 }
 
 /* Card */
 .donate-card {
-  background: #141418;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #181d2f;
+  border: 1.5px solid rgba(79, 93, 150, 0.35);
   border-radius: 20px;
   padding: 28px 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(49, 58, 98, 0.25);
 }
 
 .donate-header {
@@ -87,8 +89,8 @@
 /* Tab Switcher */
 .donate-tab-switcher {
   display: flex;
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #121624;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 20px;
@@ -101,7 +103,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px 14px;
-  color: #a1a1aa;
+  color: #94a3b8;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -109,8 +111,10 @@
 }
 
 .tab-switch-btn.active {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  background: #313a62;
+  color: #ffffff;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  box-shadow: 0 0 12px rgba(49, 58, 98, 0.5);
 }
 
 /* Leaderboard View */
@@ -127,9 +131,9 @@
 }
 
 .period-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #a1a1aa;
+  background: rgba(49, 58, 98, 0.25);
+  border: 1px solid rgba(79, 93, 150, 0.3);
+  color: #94a3b8;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 12px;
@@ -139,9 +143,10 @@
 }
 
 .period-btn.active {
-  background: #f59e0b;
-  color: #000000;
-  border-color: #f59e0b;
+  background: #4d5c9c;
+  color: #ffffff;
+  border-color: #60a5fa;
+  box-shadow: 0 0 12px rgba(77, 92, 156, 0.5);
 }
 
 .lb-list {
@@ -154,24 +159,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.2);
   border-radius: 14px;
   padding: 12px 16px;
   gap: 12px;
 }
 
 .lb-item.rank-1 {
-  border-color: rgba(245, 158, 11, 0.4);
-  background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, #1c1c22 100%);
+  border-color: #60a5fa;
+  background: linear-gradient(90deg, rgba(49, 58, 98, 0.5) 0%, #141827 100%);
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.2);
 }
 
 .lb-item.rank-2 {
-  border-color: rgba(228, 228, 231, 0.3);
+  border-color: rgba(148, 163, 184, 0.4);
 }
 
 .lb-item.rank-3 {
-  border-color: rgba(217, 119, 36, 0.3);
+  border-color: rgba(91, 110, 168, 0.4);
 }
 
 .lb-rank-badge {
@@ -179,7 +185,7 @@
   font-weight: 800;
   width: 28px;
   text-align: center;
-  color: #71717a;
+  color: #64748b;
 }
 
 .lb-user-info {
@@ -197,14 +203,14 @@
 
 .lb-count {
   font-size: 11px;
-  color: #71717a;
+  color: #64748b;
 }
 
 .lb-amount {
   font-family: 'Outfit', sans-serif;
   font-size: 16px;
   font-weight: 800;
-  color: #f59e0b;
+  color: #93c5fd;
 }
 
 .lb-empty {
@@ -213,9 +219,8 @@
 }
 
 .lb-empty-icon {
-  font-size: 40px;
   display: block;
-  margin-bottom: 10px;
+  margin: 0 auto 10px;
 }
 
 .lb-empty-title {
@@ -228,13 +233,13 @@
 .lb-empty-sub {
   margin: 0;
   font-size: 13px;
-  color: #84868c;
+  color: #94a3b8;
 }
 
 .lb-loading {
   text-align: center;
   padding: 30px;
-  color: #71717a;
+  color: #64748b;
   font-size: 13px;
 }
 
@@ -244,8 +249,8 @@
   border-radius: 50%;
   margin: 0 auto 14px;
   padding: 3px;
-  background: linear-gradient(135deg, #f59e0b, #ef4444);
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+  background: linear-gradient(135deg, #60a5fa, #313a62);
+  box-shadow: 0 8px 24px rgba(49, 58, 98, 0.5);
 }
 
 .donate-avatar img {
@@ -267,7 +272,7 @@
 
 .donate-desc {
   font-size: 14px;
-  color: #a1a1aa;
+  color: #94a3b8;
   line-height: 1.5;
   margin: 0;
 }
@@ -305,20 +310,21 @@
 .form-label {
   font-size: 13px;
   font-weight: 600;
-  color: #d4d4d8;
+  color: #e2e8f0;
   letter-spacing: 0.2px;
 }
 
 .char-count, .optional-tag {
   font-size: 11px;
-  color: #71717a;
+  color: #64748b;
 }
 
 .optional-tag {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(49, 58, 98, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.2);
   padding: 2px 6px;
   border-radius: 4px;
-  color: #a1a1aa;
+  color: #93c5fd;
 }
 
 /* Amount Selector */
@@ -330,11 +336,11 @@
 
 .amount-pill {
   position: relative;
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 12px;
   padding: 12px 8px;
-  color: #e4e4e7;
+  color: #e2e8f0;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -347,22 +353,23 @@
 }
 
 .amount-pill:hover {
-  background: #24242c;
-  border-color: rgba(255, 255, 255, 0.18);
+  background: #20273f;
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .amount-pill.active {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: #f59e0b;
-  color: #f59e0b;
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+  background: rgba(49, 58, 98, 0.6);
+  border-color: #60a5fa;
+  color: #93c5fd;
+  box-shadow: 0 0 16px rgba(49, 58, 98, 0.6);
 }
 
 .pill-tag {
   font-size: 9px;
   font-weight: 800;
-  background: #f59e0b;
-  color: #000;
+  background: #313a62;
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.4);
   padding: 1px 5px;
   border-radius: 4px;
   text-transform: uppercase;
@@ -371,8 +378,8 @@
 .custom-amount-box {
   display: flex;
   align-items: center;
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 12px;
   padding: 0 14px;
   margin-top: 4px;
@@ -380,13 +387,14 @@
 }
 
 .custom-amount-box:focus-within {
-  border-color: #f59e0b;
+  border-color: #60a5fa;
+  box-shadow: 0 0 12px rgba(49, 58, 98, 0.5);
 }
 
 .currency-prefix {
   font-size: 15px;
   font-weight: 700;
-  color: #71717a;
+  color: #64748b;
 }
 
 .custom-amount-input {
@@ -401,14 +409,14 @@
 }
 
 .custom-amount-input::placeholder {
-  color: #52525b;
+  color: #475569;
   font-weight: 400;
 }
 
 /* Inputs */
 .form-input, .form-textarea {
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 14px;
@@ -419,16 +427,17 @@
 }
 
 .form-input:focus, .form-textarea:focus {
-  border-color: #f59e0b;
+  border-color: #60a5fa;
+  box-shadow: 0 0 12px rgba(49, 58, 98, 0.5);
 }
 
 .form-input::placeholder, .form-textarea::placeholder {
-  color: #52525b;
+  color: #475569;
 }
 
 .input-hint {
   font-size: 11px;
-  color: #71717a;
+  color: #94a3b8;
   line-height: 1.4;
 }
 
@@ -438,22 +447,24 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border: none;
+  background: linear-gradient(135deg, #4d5c9c, #313a62);
+  border: 1px solid rgba(96, 165, 250, 0.4);
   border-radius: 14px;
-  color: #000000;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 700;
   padding: 16px 20px;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 8px;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 8px 24px rgba(49, 58, 98, 0.5);
 }
 
 .donate-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #5b6ea8, #3b4675);
+  border-color: #60a5fa;
+  box-shadow: 0 12px 30px rgba(49, 58, 98, 0.7);
 }
 
 .donate-submit-btn:disabled {
@@ -477,7 +488,7 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #f59e0b;
+  color: #93c5fd;
 }
 
 .timer-badge {
@@ -494,8 +505,8 @@
 }
 
 .amount-highlight {
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 20px;
@@ -503,7 +514,7 @@
 
 .amount-label {
   font-size: 12px;
-  color: #a1a1aa;
+  color: #94a3b8;
 }
 
 .amount-val-row {
@@ -523,9 +534,9 @@
 }
 
 .copy-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #e4e4e7;
+  background: rgba(49, 58, 98, 0.4);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #93c5fd;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 12px;
@@ -534,12 +545,13 @@
 }
 
 .copy-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(49, 58, 98, 0.8);
+  color: #ffffff;
 }
 
 .unique-hint {
   font-size: 11px;
-  color: #71717a;
+  color: #64748b;
   margin: 0;
 }
 
@@ -559,7 +571,7 @@
 }
 
 .qris-watermark {
-  color: #71717a;
+  color: #64748b;
   font-size: 11px;
   font-weight: 600;
   margin-top: 6px;
@@ -571,7 +583,7 @@
   justify-content: center;
   gap: 10px;
   font-size: 13px;
-  color: #d4d4d8;
+  color: #cbd5e1;
   margin-bottom: 16px;
 }
 
@@ -579,8 +591,8 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 12px #10b981;
+  background: #38bdf8;
+  box-shadow: 0 0 12px #38bdf8;
   animation: pulse 1.5s infinite;
 }
 
@@ -592,14 +604,14 @@
 
 .supported-apps {
   font-size: 12px;
-  color: #71717a;
+  color: #64748b;
   margin-bottom: 20px;
 }
 
 .cancel-order-btn {
   background: transparent;
   border: none;
-  color: #71717a;
+  color: #64748b;
   font-size: 13px;
   cursor: pointer;
   padding: 8px;
@@ -620,14 +632,14 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(16, 185, 129, 0.15);
-  border: 2px solid #10b981;
-  color: #10b981;
+  background: rgba(56, 189, 248, 0.15);
+  border: 2px solid #38bdf8;
+  color: #38bdf8;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
 }
 
 .success-title {
@@ -640,14 +652,14 @@
 
 .success-sub {
   font-size: 14px;
-  color: #a1a1aa;
+  color: #94a3b8;
   line-height: 1.5;
   margin: 0 0 24px;
 }
 
 .summary-box {
-  background: #1c1c22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 24px;
@@ -661,7 +673,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  color: #d4d4d8;
+  color: #cbd5e1;
 }
 
 .message-row {
@@ -670,7 +682,7 @@
 }
 
 .message-row em {
-  color: #f59e0b;
+  color: #93c5fd;
   font-style: italic;
   font-size: 13px;
 }

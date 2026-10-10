@@ -177,7 +177,7 @@ export default function AdminDonations() {
           <div className="obs-badge">OBS STUDIO OVERLAYS</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
             <span className="obs-url-text">📢 Alert Pop-up: https://notnot.store/overlay</span>
-            <span className="obs-url-text" style={{ color: '#f59e0b' }}>🏆 Top Sultan Widget: https://notnot.store/overlay/leaderboard</span>
+            <span className="obs-url-text" style={{ color: '#93c5fd' }}>🏆 Top Sultan Widget: https://notnot.store/overlay/leaderboard</span>
           </div>
           <p className="obs-hint">Pasang sebagai Browser Source di OBS (background 100% transparan, update realtime otomatis).</p>
         </div>
@@ -308,10 +308,10 @@ export default function AdminDonations() {
           padding: '14px 16px'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <span style={{ fontSize: '12px', fontWeight: '700', color: '#f59e0b' }}>
+            <span style={{ fontSize: '12px', fontWeight: '700', color: '#93c5fd' }}>
               URL Browser Source OBS:
             </span>
-            <span style={{ fontSize: '11px', color: '#84868c' }}>
+            <span style={{ fontSize: '11px', color: '#94a3b8' }}>
               Rekomendasi Size OBS: <strong>Width: 380px</strong>, <strong>Height: 520px</strong>
             </span>
           </div>
@@ -320,12 +320,12 @@ export default function AdminDonations() {
             display: 'flex',
             gap: '8px',
             alignItems: 'center',
-            backgroundColor: '#18181c',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundColor: '#181d2f',
+            border: '1px solid rgba(79, 93, 150, 0.3)',
             borderRadius: '8px',
             padding: '8px 12px'
           }}>
-            <code style={{ flex: 1, color: '#e4e4e7', fontSize: '12.5px', wordBreak: 'break-all', fontFamily: 'monospace' }}>
+            <code style={{ flex: 1, color: '#e2e8f0', fontSize: '12.5px', wordBreak: 'break-all', fontFamily: 'monospace' }}>
               {generatedObsUrl}
             </code>
             <a
@@ -333,13 +333,13 @@ export default function AdminDonations() {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: '#f59e0b',
+                color: '#93c5fd',
                 textDecoration: 'none',
                 fontSize: '12px',
                 fontWeight: '700',
                 padding: '4px 8px',
                 borderRadius: '6px',
-                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                backgroundColor: 'rgba(96, 165, 250, 0.2)',
                 whiteSpace: 'nowrap'
               }}
             >

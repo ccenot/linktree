@@ -389,7 +389,7 @@ export default function DonatePage({ onBack }) {
                       Tarif: Min. Rp {settings.minAmountForMedia.toLocaleString('id-ID')} ({settings.secPerThousand} dtk/Rp 1.000, maks. {settings.maxDurationSec} dtk).
                     </span>
                     {mediaUrl && finalAmount < settings.minAmountForMedia && (
-                      <span style={{ fontSize: '12px', color: '#f59e0b', fontWeight: '600' }}>
+                      <span style={{ fontSize: '12px', color: '#93c5fd', fontWeight: '600' }}>
                         ⚠️ Naikkan nominal minimal Rp {settings.minAmountForMedia.toLocaleString('id-ID')} agar video bisa diputar di stream.
                       </span>
                     )}

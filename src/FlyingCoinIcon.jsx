@@ -11,11 +11,11 @@ export default function FlyingCoinIcon({ size = 24, className = '', style = {} }
       style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0, ...style }}
     >
       <defs>
-        {/* Warm Gold / Amber Gradient */}
+        {/* Theme Slate Navy Blue Gradient based on #313a62 */}
         <linearGradient id="flyingCoinGrad" x1="20%" y1="0%" x2="80%" y2="100%">
-          <stop offset="0%" stopColor="#fde047" />
-          <stop offset="45%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#d97706" />
+          <stop offset="0%" stopColor="#93c5fd" />
+          <stop offset="45%" stopColor="#5b6ea8" />
+          <stop offset="100%" stopColor="#313a62" />
         </linearGradient>
 
         {/* Soft Wing Gradient */}
@@ -48,11 +48,11 @@ export default function FlyingCoinIcon({ size = 24, className = '', style = {} }
           strokeWidth="6" 
           strokeLinejoin="round" 
         />
-        {/* Amber Leading Edge Accent */}
+        {/* Vibrant Blue Leading Edge Accent */}
         <path 
           d="M 22 169 C 26 156, 45 153, 90 152" 
           fill="none" 
-          stroke="#f59e0b" 
+          stroke="#38bdf8" 
           strokeWidth="6" 
           strokeLinecap="round" 
         />
@@ -81,11 +81,11 @@ export default function FlyingCoinIcon({ size = 24, className = '', style = {} }
           strokeWidth="6" 
           strokeLinejoin="round" 
         />
-        {/* Amber Leading Edge Accent */}
+        {/* Vibrant Blue Leading Edge Accent */}
         <path 
           d="M 345 28 C 356 38, 325 80, 275 135" 
           fill="none" 
-          stroke="#f59e0b" 
+          stroke="#38bdf8" 
           strokeWidth="6" 
           strokeLinecap="round" 
         />
@@ -97,7 +97,7 @@ export default function FlyingCoinIcon({ size = 24, className = '', style = {} }
         <circle r="75" fill="url(#flyingCoinGrad)" stroke="#0f172a" strokeWidth="6" />
 
         {/* Reeded / Milled Edge Ticks */}
-        <circle r="69" fill="none" stroke="#78350f" strokeWidth="7" strokeDasharray="3 4.5" opacity="0.9" />
+        <circle r="69" fill="none" stroke="#1e293b" strokeWidth="7" strokeDasharray="3 4.5" opacity="0.9" />
 
         {/* Inner Coin Face Border */}
         <circle r="63" fill="url(#flyingCoinGrad)" stroke="#0f172a" strokeWidth="5" />

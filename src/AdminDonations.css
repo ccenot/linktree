@@ -7,8 +7,8 @@
 
 /* OBS Banner */
 .admin-obs-banner {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 36, 0.05));
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(49, 58, 98, 0.4), rgba(24, 29, 47, 0.6));
+  border: 1px solid rgba(96, 165, 250, 0.3);
   border-radius: 16px;
   padding: 18px 20px;
   display: flex;
@@ -28,7 +28,7 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1px;
-  color: #f59e0b;
+  color: #93c5fd;
 }
 
 .obs-url-text {
@@ -41,7 +41,7 @@
 .obs-hint {
   margin: 0;
   font-size: 12px;
-  color: #a1a1aa;
+  color: #94a3b8;
 }
 
 .obs-banner-actions {
@@ -66,13 +66,13 @@
 }
 
 .obs-action-btn.primary {
-  background: #f59e0b;
-  color: #000000;
-  border-color: #f59e0b;
+  background: #4d5c9c;
+  color: #ffffff;
+  border-color: #60a5fa;
 }
 
 .obs-action-btn.primary:hover {
-  background: #d97706;
+  background: #5b6ea8;
 }
 
 /* Metrics Grid */
@@ -89,8 +89,8 @@
 }
 
 .stat-card {
-  background: #141418;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 14px;
   padding: 16px 18px;
   display: flex;
@@ -99,19 +99,19 @@
 }
 
 .stat-card.highlight {
-  border-color: rgba(245, 158, 11, 0.4);
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, #141418 100%);
+  border-color: rgba(96, 165, 250, 0.4);
+  background: linear-gradient(180deg, rgba(49, 58, 98, 0.35) 0%, #141827 100%);
 }
 
 .stat-label {
   font-size: 11px;
   font-weight: 700;
-  color: #84868c;
+  color: #94a3b8;
   letter-spacing: 0.5px;
 }
 
 .stat-card.highlight .stat-label {
-  color: #f59e0b;
+  color: #93c5fd;
 }
 
 .stat-value {
@@ -123,13 +123,13 @@
 
 .stat-sub {
   font-size: 12px;
-  color: #71717a;
+  color: #64748b;
 }
 
 /* Media Share Settings Card */
 .admin-media-settings-card {
-  background: #141418;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 16px;
   padding: 20px;
   display: flex;
@@ -143,7 +143,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(79, 93, 150, 0.2);
   padding-bottom: 14px;
 }
 
@@ -157,7 +157,7 @@
 .media-settings-desc {
   margin: 0;
   font-size: 12px;
-  color: #84868c;
+  color: #94a3b8;
 }
 
 .switch-label {
@@ -165,16 +165,16 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(49, 58, 98, 0.3);
   padding: 6px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(79, 93, 150, 0.3);
 }
 
 .switch-text {
   font-size: 12px;
   font-weight: 700;
-  color: #f59e0b;
+  color: #93c5fd;
 }
 
 .media-settings-grid {
@@ -205,14 +205,14 @@
 .settings-field label {
   font-size: 11px;
   font-weight: 600;
-  color: #d4d4d8;
+  color: #cbd5e1;
 }
 
 .input-with-prefix, .input-with-suffix {
   display: flex;
   align-items: center;
-  background: #1c1d22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #181d2f;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 8px;
   padding: 0 10px;
 }
@@ -220,7 +220,7 @@
 .input-with-prefix span, .input-with-suffix span {
   font-size: 12px;
   font-weight: 600;
-  color: #71717a;
+  color: #64748b;
 }
 
 .input-with-prefix input, .input-with-suffix input {
@@ -236,7 +236,7 @@
 
 .field-hint {
   font-size: 10px;
-  color: #f59e0b;
+  color: #93c5fd;
 }
 
 .settings-action-col {
@@ -246,9 +246,9 @@
 }
 
 .save-settings-btn {
-  background: #f59e0b;
-  color: #000000;
-  border: none;
+  background: #4d5c9c;
+  color: #ffffff;
+  border: 1px solid rgba(96, 165, 250, 0.3);
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 12px;
@@ -258,12 +258,13 @@
 }
 
 .save-settings-btn:hover:not(:disabled) {
-  background: #d97706;
+  background: #5b6ea8;
+  border-color: #60a5fa;
 }
 
 .settings-saved-badge {
   font-size: 11px;
-  color: #10b981;
+  color: #34d399;
   font-weight: 600;
   text-align: center;
 }
@@ -283,9 +284,9 @@
 }
 
 .filter-pill {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #a1a1aa;
+  background: rgba(49, 58, 98, 0.25);
+  border: 1px solid rgba(79, 93, 150, 0.25);
+  color: #94a3b8;
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 12px;
@@ -295,9 +296,9 @@
 }
 
 .filter-pill.active {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: #f59e0b;
-  color: #f59e0b;
+  background: rgba(49, 58, 98, 0.6);
+  border-color: #60a5fa;
+  color: #93c5fd;
 }
 
 .search-box-row {
@@ -309,8 +310,8 @@
 
 .search-input {
   flex: 1;
-  background: #141418;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #181d2f;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 8px;
   padding: 8px 12px;
   color: #ffffff;
@@ -319,13 +320,13 @@
 }
 
 .search-input:focus {
-  border-color: #f59e0b;
+  border-color: #60a5fa;
 }
 
 .refresh-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #d4d4d8;
+  background: rgba(49, 58, 98, 0.25);
+  border: 1px solid rgba(79, 93, 150, 0.25);
+  color: #cbd5e1;
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 12px;
@@ -334,8 +335,8 @@
 
 /* Table Card */
 .donations-table-card {
-  background: #141418;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141827;
+  border: 1px solid rgba(79, 93, 150, 0.25);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -354,24 +355,24 @@
 }
 
 .donations-table th {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(49, 58, 98, 0.2);
   padding: 12px 16px;
   font-size: 11px;
   font-weight: 700;
-  color: #71717a;
+  color: #94a3b8;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(79, 93, 150, 0.25);
   white-space: nowrap;
 }
 
 .donations-table td {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(79, 93, 150, 0.15);
   vertical-align: middle;
 }
 
 .donations-table tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(49, 58, 98, 0.15);
 }
 
 .cell-time {
@@ -384,7 +385,7 @@
 .order-id {
   font-family: monospace;
   font-size: 10px;
-  color: #71717a;
+  color: #64748b;
 }
 
 .cell-name strong {
@@ -402,7 +403,7 @@
 }
 
 .email-empty, .no-message, .no-media {
-  color: #52525b;
+  color: #64748b;
 }
 
 .cell-amount {
@@ -417,13 +418,13 @@
 }
 
 .unique-tag {
-  color: #f59e0b;
+  color: #93c5fd;
   font-size: 11px;
   margin-left: 4px;
 }
 
 .message-content {
-  color: #e4e4e7;
+  color: #e2e8f0;
   font-style: italic;
   max-width: 240px;
   display: block;
@@ -458,14 +459,14 @@
 }
 
 .badge-status.pending {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
+  background: rgba(49, 58, 98, 0.4);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #93c5fd;
 }
 
 .tts-play-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(49, 58, 98, 0.3);
+  border: 1px solid rgba(79, 93, 150, 0.3);
   color: #ffffff;
   padding: 4px 10px;
   border-radius: 6px;
@@ -476,12 +477,13 @@
 }
 
 .tts-play-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(49, 58, 98, 0.6);
+  border-color: #60a5fa;
 }
 
 .table-loading, .table-empty {
   padding: 40px 20px;
   text-align: center;
-  color: #71717a;
+  color: #64748b;
   font-size: 14px;
 }
