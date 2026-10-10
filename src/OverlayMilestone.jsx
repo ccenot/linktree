@@ -7,7 +7,7 @@ const API_BASE = 'https://kasir.notnot.store';
 export default function OverlayMilestone() {
   const [milestone, setMilestone] = useState({
     enabled: true,
-    title: 'Target Saweran Stream',
+    title: 'Target Beli Gear Stream Baru',
     target: 500000,
     current: 0,
     percentage: 0,
