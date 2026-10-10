@@ -1,20 +1,25 @@
 .donate-wrapper {
+  width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: #0f121d;
   color: #f8fafc;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  padding: 24px 16px 60px;
+  padding: 24px 16px 80px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .donate-container {
   width: 100%;
   max-width: 520px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-sizing: border-box;
 }
 
 /* Topbar */
@@ -767,4 +772,33 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+/* Mobile viewport optimizations */
+@media (max-width: 480px) {
+  .donate-wrapper {
+    padding: 16px 12px 60px;
+  }
+  .donate-card {
+    padding: 20px 14px;
+    border-radius: 16px;
+  }
+  .amount-grid {
+    gap: 6px;
+  }
+  .amount-pill {
+    padding: 10px 4px;
+    font-size: 13px;
+  }
+  .donate-avatar {
+    width: 64px;
+    height: 64px;
+  }
+  .donate-title {
+    font-size: 22px;
+  }
+  .qris-img {
+    width: 220px;
+    height: 220px;
+  }
 }
