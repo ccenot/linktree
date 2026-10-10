@@ -145,17 +145,12 @@ export function RoundCoinIcon({ size = 18, className = '', style = {} }) {
         {/* Inner Coin Face Border */}
         <circle r="58" fill="url(#roundCoinGrad)" stroke="#0f172a" strokeWidth="4" />
 
-        {/* Dynamic Tilted Dollar Sign (-16 deg) */}
-        <g transform="rotate(-16)">
-          <rect x="-5" y="-40" width="10" height="80" rx="3" fill="#0f172a" />
-          <path 
-            d="M 18 -18 C 16 -30, 4 -34, -3 -34 C -18 -34, -24 -22, -22 -11 C -20 2, -5 6, 6 10 C 18 14, 24 20, 22 30 C 20 40, 4 44, -5 44 C -20 44, -24 34, -24 24" 
-            fill="none" 
-            stroke="#0f172a" 
-            strokeWidth="12" 
-            strokeLinecap="round" 
-          />
-        </g>
+        {/* Embossed Stream Coin Star Token Motif (Anti-OCR Currency Flag) */}
+        <polygon 
+          points="0,-30 8,-9 30,-8 14,8 19,30 0,18 -19,30 -14,8 -30,-8 -8,-9" 
+          fill="#0f172a" 
+          opacity="0.9"
+        />
       </g>
     </svg>
   );
