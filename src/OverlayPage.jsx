@@ -4,11 +4,34 @@ import FlyingCoinIcon from './FlyingCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
-// Helper to extract YouTube Video ID
-function getYouTubeId(url) {
+// Helper to extract YouTube Video ID and start time
+function parseYouTubeUrl(url) {
   if (!url) return null;
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-  return match ? match[1] : null;
+  if (!match) return null;
+  const videoId = match[1];
+
+  let startSec = 0;
+  const tMatch = url.match(/[?&](?:t|start)=([^&#]+)/);
+  if (tMatch) {
+    const val = tMatch[1];
+    if (/^\d+$/.test(val)) {
+      startSec = parseInt(val, 10);
+    } else {
+      const hours = (val.match(/(\d+)h/) || [])[1] || 0;
+      const mins = (val.match(/(\d+)m/) || [])[1] || 0;
+      const secs = (val.match(/(\d+)s/) || [])[1] || 0;
+      startSec = parseInt(hours, 10) * 3600 + parseInt(mins, 10) * 60 + parseInt(secs, 10);
+    }
+  }
+
+  return { videoId, startSec: Math.max(0, startSec) };
+}
+
+function formatMediaTime(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
 // Play modern synth chime using Web Audio API (zero external assets needed)
@@ -124,6 +147,21 @@ export default function OverlayPage() {
     }
   }, [queue, activeAlert]);
 
+  const [settings, setSettings] = useState({
+    secPerThousand: 3,
+    maxDurationSec: 900
+  });
+
+  // Fetch settings from server
+  useEffect(() => {
+    fetch(`${API_BASE}/api/public/donation-settings`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.settings) setSettings(data.settings);
+      })
+      .catch(console.error);
+  }, []);
+
   // Alert Timer & Sound
   useEffect(() => {
     if (!activeAlert) return;
@@ -142,16 +180,18 @@ export default function OverlayPage() {
     }, 600);
 
     // Duration: compact test alert (8s), dynamic video duration based on donation (capped at max), text only (9s)
-    const ytId = getYouTubeId(activeAlert.mediaUrl);
+    const ytData = parseYouTubeUrl(activeAlert.mediaUrl);
     const isTest = Boolean(activeAlert.id && String(activeAlert.id).startsWith('TEST-'));
     
     let displayDuration = 9000;
     if (isTest) {
       displayDuration = 8000;
-    } else if (ytId) {
-      displayDuration = activeAlert.durationSec 
-        ? activeAlert.durationSec * 1000 
-        : Math.min(60000, Math.max(10000, Math.floor((activeAlert.amount / 1000) * 3) * 1000));
+    } else if (ytData) {
+      const calculatedSec = Math.floor((activeAlert.amount / 1000) * (settings.secPerThousand || 3));
+      const videoSec = activeAlert.durationSec 
+        ? activeAlert.durationSec 
+        : Math.max(5, Math.min(settings.maxDurationSec || 900, calculatedSec));
+      displayDuration = videoSec * 1000;
     }
 
     const timer = setTimeout(() => {
@@ -162,9 +202,13 @@ export default function OverlayPage() {
       clearTimeout(ttsTimer);
       clearTimeout(timer);
     };
-  }, [activeAlert]);
+  }, [activeAlert, settings]);
 
-  const ytVideoId = activeAlert ? getYouTubeId(activeAlert.mediaUrl) : null;
+  const ytData = activeAlert ? parseYouTubeUrl(activeAlert.mediaUrl) : null;
+  const currentDurationSec = activeAlert
+    ? (activeAlert.durationSec || Math.max(5, Math.min(settings.maxDurationSec || 900, Math.floor((activeAlert.amount / 1000) * (settings.secPerThousand || 3)))))
+    : 10;
+  const endSec = ytData ? ytData.startSec + currentDurationSec : 0;
 
   return (
     <div className="overlay-viewport">
@@ -194,14 +238,16 @@ export default function OverlayPage() {
           </div>
 
           {/* Media Share Video Player (if YouTube attached) */}
-          {ytVideoId && (
+          {ytData && (
             <div className="media-player-box animate-fade-in">
               <div className="media-header">
-                <span className="media-tag">MEDIA SHARE BY {activeAlert.donatorName}</span>
+                <span className="media-tag">
+                  MEDIA SHARE BY {activeAlert.donatorName} ({formatMediaTime(ytData.startSec)} - {formatMediaTime(endSec)})
+                </span>
               </div>
               <iframe
                 className="media-iframe"
-                src={`https://www.youtube-nocookie.com/embed/${ytVideoId}?autoplay=1&controls=0&mute=0`}
+                src={`https://www.youtube-nocookie.com/embed/${ytData.videoId}?start=${ytData.startSec}&end=${endSec}&autoplay=1&controls=0&mute=0`}
                 title="Donation Media"
                 allow="autoplay; encrypted-media"
               />

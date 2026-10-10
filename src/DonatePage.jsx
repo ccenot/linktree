@@ -12,6 +12,28 @@ const PRESET_AMOUNTS = [
   { label: 'Rp 100.000', value: 100000 }
 ];
 
+// Convert "MM:SS" or "HH:MM:SS" or "SS" to seconds
+function parseTimeToSeconds(val) {
+  if (!val) return 0;
+  const str = String(val).trim();
+  if (/^\d+$/.test(str)) return parseInt(str, 10);
+  const parts = str.split(':').map(p => parseInt(p, 10) || 0);
+  if (parts.length === 2) return parts[0] * 60 + parts[1];
+  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  return 0;
+}
+
+// Format seconds to "MM:SS" or "HH:MM:SS"
+function formatSecondsToTime(totalSec) {
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) {
+    return `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
 export default function DonatePage({ onBack }) {
   const [activeTab, setActiveTab] = useState('donate'); // 'donate' | 'leaderboard'
   const [leaderboardPeriod, setLeaderboardPeriod] = useState('all'); // 'all' | 'month' | 'today'
@@ -24,6 +46,7 @@ export default function DonatePage({ onBack }) {
   const [customAmount, setCustomAmount] = useState('');
   const [message, setMessage] = useState('');
   const [mediaUrl, setMediaUrl] = useState('');
+  const [mediaStart, setMediaStart] = useState('00:00');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -139,6 +162,16 @@ export default function DonatePage({ onBack }) {
 
     try {
       setIsSubmitting(true);
+      
+      let finalMediaUrl = mediaUrl.trim();
+      if (finalMediaUrl && settings.mediaShareEnabled) {
+        const startSec = parseTimeToSeconds(mediaStart);
+        if (startSec > 0 && !finalMediaUrl.includes('start=') && !finalMediaUrl.includes('t=')) {
+          const separator = finalMediaUrl.includes('?') ? '&' : '?';
+          finalMediaUrl = `${finalMediaUrl}${separator}start=${startSec}`;
+        }
+      }
+
       const res = await fetch(`${API_BASE}/api/public/donate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,7 +180,7 @@ export default function DonatePage({ onBack }) {
           email: email.trim(),
           amount: finalAmount,
           message: message.trim(),
-          mediaUrl: mediaUrl.trim()
+          mediaUrl: finalMediaUrl
         })
       });
 
@@ -401,16 +434,63 @@ export default function DonatePage({ onBack }) {
               {settings.mediaShareEnabled && (
                 <div className="form-group">
                   <div className="form-label-row">
-                    <label className="form-label">Media Share (Opsional)</label>
-                    <span className="optional-tag">YouTube</span>
+                    <label className="form-label">Media Share (Link YouTube)</label>
+                    <span className="optional-tag">Opsional</span>
                   </div>
                   <input
                     type="url"
                     placeholder="https://www.youtube.com/watch?v=..."
                     value={mediaUrl}
-                    onChange={(e) => setMediaUrl(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setMediaUrl(val);
+                      // Auto extract start timestamp if user pasted link with ?t=... or &start=...
+                      const tMatch = val.match(/[?&](?:t|start)=([^&#]+)/);
+                      if (tMatch) {
+                        const tVal = tMatch[1];
+                        if (/^\d+$/.test(tVal)) {
+                          setMediaStart(formatSecondsToTime(parseInt(tVal, 10)));
+                        } else {
+                          const hours = (tVal.match(/(\d+)h/) || [])[1] || 0;
+                          const mins = (tVal.match(/(\d+)m/) || [])[1] || 0;
+                          const secs = (tVal.match(/(\d+)s/) || [])[1] || 0;
+                          const sec = parseInt(hours, 10) * 3600 + parseInt(mins, 10) * 60 + parseInt(secs, 10);
+                          if (sec > 0) setMediaStart(formatSecondsToTime(sec));
+                        }
+                      }
+                    }}
                     className="form-input"
                   />
+
+                  {/* Custom Cut Start Time Input */}
+                  {mediaUrl && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      marginTop: '6px',
+                      backgroundColor: '#141827',
+                      border: '1px solid rgba(79, 93, 150, 0.3)',
+                      borderRadius: '10px',
+                      padding: '8px 12px'
+                    }}>
+                      <label style={{ fontSize: '12px', fontWeight: '600', color: '#cbd5e1', whiteSpace: 'nowrap' }}>
+                        ✂️ Mulai dari menit/detik:
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="00:00 (misal 10:00)"
+                        value={mediaStart}
+                        onChange={(e) => setMediaStart(e.target.value)}
+                        className="form-input"
+                        style={{ padding: '4px 8px', fontSize: '12.5px', width: '120px', height: '30px' }}
+                      />
+                      <span style={{ fontSize: '11px', color: '#64748b' }}>
+                        (MM:SS)
+                      </span>
+                    </div>
+                  )}
+
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
                     <span className="input-hint">
                       Tarif: Min. Rp {settings.minAmountForMedia.toLocaleString('id-ID')} ({settings.secPerThousand} dtk/Rp 1.000, maks. {settings.maxDurationSec} dtk).
@@ -420,11 +500,30 @@ export default function DonatePage({ onBack }) {
                         ⚠️ Naikkan nominal minimal Rp {settings.minAmountForMedia.toLocaleString('id-ID')} agar video bisa diputar di stream.
                       </span>
                     )}
-                    {mediaUrl && finalAmount >= settings.minAmountForMedia && (
-                      <span style={{ fontSize: '12px', color: '#10b981', fontWeight: '600' }}>
-                        ✓ Estimasi durasi putar di stream: {Math.min(settings.maxDurationSec, Math.floor((finalAmount / 1000) * settings.secPerThousand))} detik.
-                      </span>
-                    )}
+                    {mediaUrl && finalAmount >= settings.minAmountForMedia && (() => {
+                      const durSec = Math.min(settings.maxDurationSec, Math.floor((finalAmount / 1000) * settings.secPerThousand));
+                      const startSec = parseTimeToSeconds(mediaStart);
+                      const endSec = startSec + durSec;
+                      return (
+                        <div style={{
+                          backgroundColor: '#141827',
+                          border: '1px solid rgba(56, 189, 248, 0.3)',
+                          borderRadius: '10px',
+                          padding: '10px 12px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '3px',
+                          marginTop: '4px'
+                        }}>
+                          <span style={{ fontSize: '12.5px', color: '#38bdf8', fontWeight: '700' }}>
+                            ✂️ Custom Cut: {formatSecondsToTime(startSec)} ➔ {formatSecondsToTime(endSec)}
+                          </span>
+                          <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+                            Video diputar selama {durSec} detik ({Math.round(durSec / 60 * 10) / 10} menit) sesuai nominal saweran Rp {finalAmount.toLocaleString('id-ID')}.
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               )}
