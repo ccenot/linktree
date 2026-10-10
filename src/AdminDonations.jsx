@@ -11,6 +11,7 @@ export default function AdminDonations() {
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'settled' | 'pending'
   const [copiedOverlay, setCopiedOverlay] = useState(false);
   const [testStatus, setTestStatus] = useState('');
+  const [replayingId, setReplayingId] = useState(null);
 
   // OBS Leaderboard Template Customizer State
   const [obsLbPeriod, setObsLbPeriod] = useState('month');
@@ -131,6 +132,21 @@ export default function AdminDonations() {
       }
     } catch (e) {
       setTestStatus('Gagal kirim');
+    }
+  };
+
+  const handleReplayAlert = async (id) => {
+    try {
+      setReplayingId(id);
+      const res = await fetch(`${API_BASE}/api/public/overlay/replay/${id}`, { method: 'POST' });
+      if (res.ok) {
+        setTimeout(() => setReplayingId(null), 2000);
+      } else {
+        setReplayingId(null);
+      }
+    } catch (e) {
+      console.error(e);
+      setReplayingId(null);
     }
   };
 
@@ -704,13 +720,25 @@ export default function AdminDonations() {
                         )}
                       </td>
 
-                      <td className="cell-actions">
+                      <td className="cell-actions" style={{ display: 'flex', gap: '6px' }}>
+                        <button
+                          onClick={() => handleReplayAlert(item.id)}
+                          className="tts-play-btn"
+                          style={{
+                            backgroundColor: 'rgba(56, 189, 248, 0.18)',
+                            borderColor: 'rgba(56, 189, 248, 0.35)',
+                            color: '#38bdf8'
+                          }}
+                          title="Putar alert notifikasi, suara TTS, dan video di OBS Overlay"
+                        >
+                          {replayingId === item.id ? '✓ Diputar!' : '📢 Putar di OBS'}
+                        </button>
                         <button
                           onClick={() => handlePlayTTS(item.donator_name, item.amount, item.message)}
                           className="tts-play-btn"
                           title="Dengarkan Suara TTS"
                         >
-                          🔊 Play TTS
+                          🔊 TTS
                         </button>
                       </td>
                     </tr>
