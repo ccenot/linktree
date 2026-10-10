@@ -151,13 +151,20 @@ export default function AdminDonations() {
   };
 
   const handlePlayTTS = (name, amount, message) => {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
     const text = `${name} menyawer Rp ${amount.toLocaleString('id-ID')}. Pesan: ${message || 'Semangat!'}`;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'id-ID';
-    utterance.rate = 1.0;
-    window.speechSynthesis.speak(utterance);
+    try {
+      const audio = new Audio(`${API_BASE}/api/public/tts?text=${encodeURIComponent(text)}`);
+      audio.play().catch(() => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'id-ID';
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    } catch (e) {
+      console.error('Play TTS error:', e);
+    }
   };
 
   // Calculations

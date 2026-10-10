@@ -65,22 +65,36 @@ function playChime() {
   }
 }
 
-// Speak TTS message in Indonesian
+// Play natural Indonesian female TTS (Suara normal Mbak Google / Saweria style)
+let currentTtsAudio = null;
+
 function speakTTS(text) {
-  if (!('speechSynthesis' in window) || !text) return;
+  if (!text) return;
   try {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'id-ID';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.05;
+    if (currentTtsAudio) {
+      currentTtsAudio.pause();
+      currentTtsAudio.currentTime = 0;
+      currentTtsAudio = null;
+    }
 
-    // Pick Indonesian voice if available
-    const voices = window.speechSynthesis.getVoices();
-    const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
-    if (idVoice) utterance.voice = idVoice;
+    const audioUrl = `${API_BASE}/api/public/tts?text=${encodeURIComponent(text)}`;
+    const audio = new Audio(audioUrl);
+    currentTtsAudio = audio;
 
-    window.speechSynthesis.speak(utterance);
+    audio.play().catch((err) => {
+      console.warn('Natural TTS audio play error, fallback to browser synthesis:', err);
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+        if (idVoice) utterance.voice = idVoice;
+        window.speechSynthesis.speak(utterance);
+      }
+    });
+
+    return audio;
   } catch (e) {
     console.warn('TTS failed:', e);
   }
@@ -179,11 +193,11 @@ export default function OverlayPage() {
       speakTTS(ttsText);
     }, 600);
 
-    // Duration: compact test alert (8s), dynamic video duration based on donation (capped at max), text only (9s)
+    // Duration: compact test alert (8s), dynamic video duration based on donation (capped at max), text only (adjusted to message length)
     const ytData = parseYouTubeUrl(activeAlert.mediaUrl);
     const isTest = Boolean(activeAlert.id && String(activeAlert.id).startsWith('TEST-'));
     
-    let displayDuration = 9000;
+    let displayDuration = Math.max(9000, Math.ceil(ttsText.length * 80) + 2500);
     if (isTest) {
       displayDuration = 8000;
     } else if (ytData) {
@@ -201,6 +215,10 @@ export default function OverlayPage() {
     return () => {
       clearTimeout(ttsTimer);
       clearTimeout(timer);
+      if (currentTtsAudio) {
+        currentTtsAudio.pause();
+        currentTtsAudio = null;
+      }
     };
   }, [activeAlert, settings]);
 
