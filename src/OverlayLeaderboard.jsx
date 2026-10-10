@@ -75,7 +75,6 @@ export default function OverlayLeaderboard() {
         {/* Header */}
         <div className="obs-lb-header">
           <div className="obs-lb-header-left">
-            <GoldCoinIcon size={20} className="obs-lb-header-icon" />
             <span className="obs-lb-title">{title}</span>
           </div>
           <span className="obs-lb-badge">{periodLabel}</span>
