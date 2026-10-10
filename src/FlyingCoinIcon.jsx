@@ -117,3 +117,46 @@ export default function FlyingCoinIcon({ size = 24, className = '', style = {} }
     </svg>
   );
 }
+
+export function RoundCoinIcon({ size = 18, className = '', style = {} }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      viewBox="0 0 160 160" 
+      width={size} 
+      height={size} 
+      className={className}
+      style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0, ...style }}
+    >
+      <defs>
+        <linearGradient id="roundCoinGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#93c5fd" />
+          <stop offset="45%" stopColor="#5b6ea8" />
+          <stop offset="100%" stopColor="#313a62" />
+        </linearGradient>
+      </defs>
+      <g transform="translate(80, 80)">
+        {/* Outer Coin Rim */}
+        <circle r="72" fill="url(#roundCoinGrad)" stroke="#0f172a" strokeWidth="6" />
+
+        {/* Reeded / Milled Edge Ticks */}
+        <circle r="65" fill="none" stroke="#1e293b" strokeWidth="6" strokeDasharray="3 4" opacity="0.9" />
+
+        {/* Inner Coin Face Border */}
+        <circle r="58" fill="url(#roundCoinGrad)" stroke="#0f172a" strokeWidth="4" />
+
+        {/* Dynamic Tilted Dollar Sign (-16 deg) */}
+        <g transform="rotate(-16)">
+          <rect x="-5" y="-40" width="10" height="80" rx="3" fill="#0f172a" />
+          <path 
+            d="M 18 -18 C 16 -30, 4 -34, -3 -34 C -18 -34, -24 -22, -22 -11 C -20 2, -5 6, 6 10 C 18 14, 24 20, 22 30 C 20 40, 4 44, -5 44 C -20 44, -24 34, -24 24" 
+            fill="none" 
+            stroke="#0f172a" 
+            strokeWidth="12" 
+            strokeLinecap="round" 
+          />
+        </g>
+      </g>
+    </svg>
+  );
+}
