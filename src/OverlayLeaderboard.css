@@ -1,4 +1,4 @@
-/* OBS Saweria-Style Simple Leaderboard Viewport (100% Transparent Background) */
+/* OBS Leaderboard Viewport (100% Transparent Background) */
 .obs-leaderboard-viewport {
   width: 100vw;
   height: 100vh;
@@ -6,87 +6,138 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 12px;
+  padding: 16px;
   box-sizing: border-box;
   font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
   color: #ffffff;
 }
 
-/* Simple List Container */
-.obs-saweria-lb {
-  width: 280px;
+/* Bingkai Utama Card Leaderboard (Tema Navy Blue #313a62) */
+.obs-lb-card {
+  width: 320px;
   max-width: 100%;
+  background: rgba(24, 29, 47, 0.94);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(96, 165, 250, 0.35);
+  border-radius: 18px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(49, 58, 98, 0.4);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 5px;
 }
 
-/* Row (Bingkai Per Nama - Saweria Theme) */
+/* Header Bingkai */
+.obs-lb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, rgba(49, 58, 98, 0.5) 0%, rgba(24, 29, 47, 0.2) 100%);
+  border-bottom: 1px solid rgba(79, 93, 150, 0.35);
+}
+
+.obs-lb-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.obs-lb-header-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.obs-lb-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14.5px;
+  font-weight: 850;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.obs-lb-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  background: rgba(49, 58, 98, 0.4);
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  padding: 2px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+/* List Nama (Murni Teks Bersih Tanpa Frame Per-Nama) */
+.obs-lb-list {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+/* Row Murni Teks (No border box / No frame per nama) */
 .obs-lb-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px 12px;
-  border-radius: 9px;
-  background: rgba(24, 29, 47, 0.85);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(79, 93, 150, 0.3);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  padding: 2px 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   transition: all 0.2s ease;
-  gap: 10px;
-}
-
-/* Rank 1 Highlight */
-.obs-lb-row.rank-1 {
-  background: linear-gradient(90deg, rgba(49, 58, 98, 0.75) 0%, rgba(24, 29, 47, 0.88) 100%);
-  border-color: #60a5fa;
-  box-shadow: 0 0 14px rgba(96, 165, 250, 0.3), 0 4px 14px rgba(0, 0, 0, 0.5);
-}
-
-.obs-lb-row.rank-2 {
-  background: linear-gradient(90deg, rgba(49, 58, 98, 0.5) 0%, rgba(24, 29, 47, 0.85) 100%);
-  border-color: rgba(148, 163, 184, 0.4);
-}
-
-.obs-lb-row.rank-3 {
-  background: linear-gradient(90deg, rgba(49, 58, 98, 0.4) 0%, rgba(24, 29, 47, 0.85) 100%);
-  border-color: rgba(91, 110, 168, 0.4);
+  gap: 12px;
 }
 
 /* Left: 1. Nama */
 .obs-lb-name-col {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  align-items: baseline;
+  gap: 8px;
   overflow: hidden;
   flex: 1;
 }
 
 .obs-lb-rank {
   font-family: 'Outfit', sans-serif;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 850;
-  color: #93c5fd;
+  color: #64748b;
   flex-shrink: 0;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  width: 18px;
 }
 
 .obs-lb-row.rank-1 .obs-lb-rank {
-  color: #60a5fa;
-  text-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+  color: #f59e0b;
+  font-weight: 900;
+}
+
+.obs-lb-row.rank-2 .obs-lb-rank {
+  color: #e2e8f0;
+  font-weight: 900;
+}
+
+.obs-lb-row.rank-3 .obs-lb-rank {
+  color: #cd7f32;
+  font-weight: 900;
 }
 
 .obs-lb-name {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #f8fafc;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Right: [Bulat Coin] 50.000 */
+.obs-lb-row.rank-1 .obs-lb-name {
+  color: #ffffff;
+}
+
+/* Right: [Gold Coin] 50.000 (No 'Rp') */
 .obs-lb-val-col {
   display: flex;
   align-items: center;
@@ -96,7 +147,7 @@
 
 .obs-lb-amount {
   font-family: 'Outfit', sans-serif;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 850;
   color: #ffffff;
   letter-spacing: -0.2px;
@@ -104,35 +155,14 @@
 }
 
 .obs-lb-row.rank-1 .obs-lb-amount {
-  color: #93c5fd;
-  text-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
 
 .obs-lb-empty {
-  padding: 14px;
+  padding: 16px 12px;
+  text-align: center;
   font-size: 12px;
   color: #64748b;
-  text-align: center;
   font-style: italic;
-  background: rgba(24, 29, 47, 0.6);
-  border-radius: 8px;
-}
-
-/* Theme Text Only (Transparent Without Box Background) */
-.theme-text .obs-lb-row {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 4px 6px;
-}
-
-.theme-text .obs-lb-name,
-.theme-text .obs-lb-rank,
-.theme-text .obs-lb-amount {
-  text-shadow: 
-    -1px -1px 0 #000,  
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000,
-     0 2px 8px rgba(0, 0, 0, 0.9) !important;
 }

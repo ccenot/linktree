@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './OverlayLeaderboard.css';
-import { RoundCoinIcon } from './FlyingCoinIcon';
+import GoldCoinIcon from './GoldCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
 export default function OverlayLeaderboard() {
   const [period, setPeriod] = useState('month'); // 'all' | 'month' | 'today'
   const [limit, setLimit] = useState(5);
-  const [theme, setTheme] = useState('simple'); // 'simple' | 'pill' | 'text'
+  const [title, setTitle] = useState('LEADERBOARD');
   const [leaderboard, setLeaderboard] = useState([]);
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function OverlayLeaderboard() {
     const l = parseInt(params.get('limit'), 10);
     if (!isNaN(l) && l > 0 && l <= 20) setLimit(l);
 
-    const t = params.get('theme');
-    if (t && ['simple', 'pill', 'text'].includes(t)) setTheme(t);
+    const customTitle = params.get('title');
+    if (customTitle) setTitle(customTitle);
 
     // Apply transparent body classes
     document.documentElement.classList.add('is-overlay');
@@ -65,32 +65,49 @@ export default function OverlayLeaderboard() {
     };
   }, [period, limit]);
 
+  const periodLabel = period === 'today' ? 'HARI INI' : period === 'month' ? 'BULAN INI' : 'ALL TIME';
+
   return (
-    <div className={`obs-leaderboard-viewport theme-${theme}`}>
-      <div className="obs-saweria-lb">
-        {leaderboard.length === 0 ? (
-          <div className="obs-lb-empty">
-            <span>Belum ada data</span>
+    <div className="obs-leaderboard-viewport">
+      {/* Bingkai Utama Tetap Dipertahankan */}
+      <div className="obs-lb-card">
+        
+        {/* Header */}
+        <div className="obs-lb-header">
+          <div className="obs-lb-header-left">
+            <GoldCoinIcon size={20} className="obs-lb-header-icon" />
+            <span className="obs-lb-title">{title}</span>
           </div>
-        ) : (
-          leaderboard.map((item, idx) => {
-            const rank = idx + 1;
-            return (
-              <div key={idx} className={`obs-lb-row rank-${rank}`}>
-                <div className="obs-lb-name-col">
-                  <span className="obs-lb-rank">{rank}.</span>
-                  <span className="obs-lb-name">{item.name}</span>
+          <span className="obs-lb-badge">{periodLabel}</span>
+        </div>
+
+        {/* List Nama (Murni Teks Bersih Tanpa Frame Per-Nama) */}
+        <div className="obs-lb-list">
+          {leaderboard.length === 0 ? (
+            <div className="obs-lb-empty">
+              <span>Belum ada data</span>
+            </div>
+          ) : (
+            leaderboard.map((item, idx) => {
+              const rank = idx + 1;
+              return (
+                <div key={idx} className={`obs-lb-row rank-${rank}`}>
+                  <div className="obs-lb-name-col">
+                    <span className="obs-lb-rank">{rank}.</span>
+                    <span className="obs-lb-name">{item.name}</span>
+                  </div>
+                  <div className="obs-lb-val-col">
+                    <GoldCoinIcon size={16} />
+                    <span className="obs-lb-amount">
+                      {Number(item.total_amount).toLocaleString('id-ID')}
+                    </span>
+                  </div>
                 </div>
-                <div className="obs-lb-val-col">
-                  <RoundCoinIcon size={16} />
-                  <span className="obs-lb-amount">
-                    {Number(item.total_amount).toLocaleString('id-ID')}
-                  </span>
-                </div>
-              </div>
-            );
-          })
-        )}
+              );
+            })
+          )}
+        </div>
+
       </div>
     </div>
   );
