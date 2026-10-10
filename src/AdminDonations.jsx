@@ -16,11 +16,11 @@ export default function AdminDonations() {
   const [obsLbPeriod, setObsLbPeriod] = useState('month');
   const [obsLbLimit, setObsLbLimit] = useState(5);
   const [obsLbTheme, setObsLbTheme] = useState('dark');
-  const [obsLbTitle, setObsLbTitle] = useState('TOP SULTAN');
+  const [obsLbTitle, setObsLbTitle] = useState('LEADERBOARD');
   const [copiedGeneratedUrl, setCopiedGeneratedUrl] = useState(false);
 
   // Generated OBS URL
-  const generatedObsUrl = `https://notnot.store/overlay/leaderboard?period=${obsLbPeriod}&limit=${obsLbLimit}&theme=${obsLbTheme}${obsLbTitle !== 'TOP SULTAN' ? `&title=${encodeURIComponent(obsLbTitle)}` : ''}`;
+  const generatedObsUrl = `https://notnot.store/overlay/leaderboard?period=${obsLbPeriod}&limit=${obsLbLimit}&theme=${obsLbTheme}${obsLbTitle !== 'LEADERBOARD' ? `&title=${encodeURIComponent(obsLbTitle)}` : ''}`;
 
   // Media Share & Milestone Settings
   const [settings, setSettings] = useState({
@@ -189,26 +189,24 @@ export default function AdminDonations() {
         <div className="obs-banner-info">
           <div className="obs-badge">OBS STUDIO OVERLAYS</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
-            <span className="obs-url-text">📢 Alert Pop-up: https://notnot.store/overlay</span>
-            <span className="obs-url-text" style={{ color: '#93c5fd' }}>🏆 Top Sultan: https://notnot.store/overlay/leaderboard</span>
-            <span className="obs-url-text" style={{ color: '#38bdf8' }}>🎯 Goal Milestone: https://notnot.store/overlay/milestone</span>
+            <span className="obs-url-text">Alert Pop-up: https://notnot.store/overlay</span>
+            <span className="obs-url-text" style={{ color: '#93c5fd' }}>Leaderboard: https://notnot.store/overlay/leaderboard</span>
+            <span className="obs-url-text" style={{ color: '#38bdf8' }}>Goal Milestone: https://notnot.store/overlay/milestone</span>
           </div>
           <p className="obs-hint">Pasang sebagai Browser Source di OBS (background 100% transparan, update realtime otomatis).</p>
         </div>
         <div className="obs-banner-actions">
           <button onClick={handleCopyOverlayUrl} className="obs-action-btn">
-            {copiedOverlay === true ? '✓ Alert Tersalin!' : '📋 Link Alert OBS'}
+            {copiedOverlay === true ? '✓ Alert Tersalin!' : 'Link Alert OBS'}
           </button>
-          <button onClick={handleCopyLeaderboardOverlay} className="obs-action-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <FlyingCoinIcon size={18} />
-            <span>{copiedOverlay === 'lb' ? '✓ Tersalin!' : 'Top Sultan'}</span>
+          <button onClick={handleCopyLeaderboardOverlay} className="obs-action-btn">
+            {copiedOverlay === 'lb' ? '✓ Tersalin!' : 'Leaderboard OBS'}
           </button>
-          <button onClick={() => handleCopyMilestoneOverlay('')} className="obs-action-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <span>🎯</span>
-            <span>{copiedMilestone === 'default' ? '✓ Tersalin!' : 'Milestone'}</span>
+          <button onClick={() => handleCopyMilestoneOverlay('')} className="obs-action-btn">
+            {copiedMilestone === 'default' ? '✓ Tersalin!' : 'Milestone OBS'}
           </button>
           <button onClick={handleTestAlert} className="obs-action-btn primary">
-            {testStatus || '🔔 Test Alert OBS'}
+            {testStatus || 'Test Alert OBS'}
           </button>
         </div>
       </div>
@@ -242,7 +240,7 @@ export default function AdminDonations() {
               <FlyingCoinIcon size={24} />
               <h3 className="media-settings-title" style={{ margin: 0 }}>Template & URL Widget OBS Leaderboard</h3>
             </div>
-            <p className="media-settings-desc">Kustomisasi tampilan widget Top Sultan untuk OBS Studio secara langsung (preview real-time).</p>
+            <p className="media-settings-desc">Kustomisasi tampilan widget Leaderboard untuk OBS Studio secara langsung (preview real-time).</p>
           </div>
           <button 
             type="button" 
@@ -310,7 +308,7 @@ export default function AdminDonations() {
               onChange={(e) => setObsLbTitle(e.target.value)}
               className="search-input"
               style={{ padding: '8px 10px', height: '37px' }}
-              placeholder="TOP SULTAN"
+              placeholder="LEADERBOARD"
             />
           </div>
         </div>

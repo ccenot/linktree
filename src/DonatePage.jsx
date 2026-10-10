@@ -237,16 +237,14 @@ export default function DonatePage({ onBack }) {
                 className={`tab-switch-btn ${activeTab === 'donate' ? 'active' : ''}`}
                 onClick={() => setActiveTab('donate')}
               >
-                💖 Kirim Saweran
+                Kirim Saweran
               </button>
               <button
                 type="button"
                 className={`tab-switch-btn ${activeTab === 'leaderboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('leaderboard')}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                <FlyingCoinIcon size={20} />
-                <span>Top Sultan</span>
+                Leaderboard
               </button>
             </div>
 
@@ -278,7 +276,7 @@ export default function DonatePage({ onBack }) {
                 </div>
 
                 {loadingLeaderboard ? (
-                  <div className="lb-loading">Memuat peringkat sultan...</div>
+                  <div className="lb-loading">Memuat leaderboard...</div>
                 ) : leaderboard.length === 0 ? (
                   <div className="lb-empty">
                     <FlyingCoinIcon size={64} className="lb-empty-icon" style={{ margin: '0 auto 12px' }} />
@@ -376,7 +374,7 @@ export default function DonatePage({ onBack }) {
                 <input
                   type="email"
                   required
-                  placeholder="nama@email.com (agar admin bisa hubungi kamu)"
+                  placeholder="nama@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="form-input"

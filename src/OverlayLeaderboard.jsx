@@ -8,7 +8,7 @@ export default function OverlayLeaderboard() {
   const [period, setPeriod] = useState('month'); // 'all' | 'month' | 'today'
   const [limit, setLimit] = useState(5);
   const [theme, setTheme] = useState('dark'); // 'dark' | 'glass' | 'compact'
-  const [title, setTitle] = useState('TOP SULTAN');
+  const [title, setTitle] = useState('LEADERBOARD');
   const [leaderboard, setLeaderboard] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
 
