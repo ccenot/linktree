@@ -22,15 +22,21 @@ export default function AdminDonations() {
   // Generated OBS URL
   const generatedObsUrl = `https://notnot.store/overlay/leaderboard?period=${obsLbPeriod}&limit=${obsLbLimit}&theme=${obsLbTheme}${obsLbTitle !== 'TOP SULTAN' ? `&title=${encodeURIComponent(obsLbTitle)}` : ''}`;
 
-  // Media Share Settings
+  // Media Share & Milestone Settings
   const [settings, setSettings] = useState({
     mediaShareEnabled: true,
     minAmountForMedia: 10000,
     secPerThousand: 3,
-    maxDurationSec: 60
+    maxDurationSec: 60,
+    milestoneEnabled: true,
+    milestoneTitle: 'Target Beli Gear Stream Baru',
+    milestoneTarget: 500000,
+    milestonePeriod: 'month',
+    milestoneOffset: 0
   });
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsSavedMsg, setSettingsSavedMsg] = useState('');
+  const [copiedMilestone, setCopiedMilestone] = useState(false);
 
   const fetchSettings = async () => {
     try {
@@ -97,6 +103,13 @@ export default function AdminDonations() {
     navigator.clipboard.writeText('https://notnot.store/overlay/leaderboard');
     setCopiedOverlay('lb');
     setTimeout(() => setCopiedOverlay(false), 2000);
+  };
+
+  const handleCopyMilestoneOverlay = (param = '') => {
+    const url = param ? `https://notnot.store/overlay/milestone${param}` : 'https://notnot.store/overlay/milestone';
+    navigator.clipboard.writeText(url);
+    setCopiedMilestone(param || 'default');
+    setTimeout(() => setCopiedMilestone(false), 2000);
   };
 
   const handleTestAlert = async () => {
@@ -177,7 +190,8 @@ export default function AdminDonations() {
           <div className="obs-badge">OBS STUDIO OVERLAYS</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
             <span className="obs-url-text">📢 Alert Pop-up: https://notnot.store/overlay</span>
-            <span className="obs-url-text" style={{ color: '#93c5fd' }}>🏆 Top Sultan Widget: https://notnot.store/overlay/leaderboard</span>
+            <span className="obs-url-text" style={{ color: '#93c5fd' }}>🏆 Top Sultan: https://notnot.store/overlay/leaderboard</span>
+            <span className="obs-url-text" style={{ color: '#38bdf8' }}>🎯 Goal Milestone: https://notnot.store/overlay/milestone</span>
           </div>
           <p className="obs-hint">Pasang sebagai Browser Source di OBS (background 100% transparan, update realtime otomatis).</p>
         </div>
@@ -187,7 +201,11 @@ export default function AdminDonations() {
           </button>
           <button onClick={handleCopyLeaderboardOverlay} className="obs-action-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             <FlyingCoinIcon size={18} />
-            <span>{copiedOverlay === 'lb' ? '✓ Leaderboard Tersalin!' : 'Link Leaderboard OBS'}</span>
+            <span>{copiedOverlay === 'lb' ? '✓ Tersalin!' : 'Top Sultan'}</span>
+          </button>
+          <button onClick={() => handleCopyMilestoneOverlay('')} className="obs-action-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <span>🎯</span>
+            <span>{copiedMilestone === 'default' ? '✓ Tersalin!' : 'Milestone'}</span>
           </button>
           <button onClick={handleTestAlert} className="obs-action-btn primary">
             {testStatus || '🔔 Test Alert OBS'}
@@ -348,6 +366,147 @@ export default function AdminDonations() {
           </div>
         </div>
       </div>
+
+      {/* MILESTONE / GOAL BAR SETTINGS */}
+      <form onSubmit={handleSaveSettings} className="admin-media-settings-card">
+        <div className="media-settings-header">
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>🎯</span>
+              <h3 className="media-settings-title" style={{ margin: 0 }}>Target Saweran & Milestone Goal Bar</h3>
+            </div>
+            <p className="media-settings-desc">Pasang progress bar target saweran di OBS Studio dan laman donate untuk memotivasi penonton.</p>
+          </div>
+          <div className="toggle-wrapper">
+            <label className="switch-label">
+              <input
+                type="checkbox"
+                checked={settings.milestoneEnabled ?? true}
+                onChange={(e) => setSettings(prev => ({ ...prev, milestoneEnabled: e.target.checked }))}
+              />
+              <span className="switch-text">{settings.milestoneEnabled ? '✓ Milestone Aktif' : 'Nonaktif'}</span>
+            </label>
+          </div>
+        </div>
+
+        <div className="media-settings-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          <div className="settings-field">
+            <label>Judul Target Milestone</label>
+            <input
+              type="text"
+              value={settings.milestoneTitle || ''}
+              onChange={(e) => setSettings(prev => ({ ...prev, milestoneTitle: e.target.value }))}
+              className="search-input"
+              style={{ padding: '8px 10px', height: '37px' }}
+              placeholder="e.g. Beli Mic Shure Baru"
+            />
+          </div>
+
+          <div className="settings-field">
+            <label>Target Nominal (Rp)</label>
+            <div className="input-with-prefix">
+              <span>Rp</span>
+              <input
+                type="number"
+                min="10000"
+                step="10000"
+                value={settings.milestoneTarget || 500000}
+                onChange={(e) => setSettings(prev => ({ ...prev, milestoneTarget: Number(e.target.value) }))}
+              />
+            </div>
+          </div>
+
+          <div className="settings-field">
+            <label>Hitung Berdasarkan</label>
+            <select
+              value={settings.milestonePeriod || 'month'}
+              onChange={(e) => setSettings(prev => ({ ...prev, milestonePeriod: e.target.value }))}
+              className="search-input"
+              style={{ padding: '8px 10px', height: '37px', cursor: 'pointer' }}
+            >
+              <option value="today">Saweran Hari Ini (Live)</option>
+              <option value="month">Saweran Bulan Ini (Default)</option>
+              <option value="all">Semua Waktu (All-Time)</option>
+            </select>
+          </div>
+
+          <div className="settings-action-col">
+            <button type="submit" disabled={isSavingSettings} className="save-settings-btn">
+              {isSavingSettings ? 'Menyimpan...' : '💾 Simpan Milestone'}
+            </button>
+            {settingsSavedMsg && <span className="settings-saved-badge">{settingsSavedMsg}</span>}
+          </div>
+        </div>
+
+        {/* Milestone OBS Quick Links */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          backgroundColor: '#0c0e18',
+          border: '1px solid rgba(79, 93, 150, 0.25)',
+          borderRadius: '12px',
+          padding: '12px 14px'
+        }}>
+          <span style={{ fontSize: '11.5px', fontWeight: '700', color: '#38bdf8' }}>
+            🔗 Link Browser Source OBS untuk Milestone:
+          </span>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => handleCopyMilestoneOverlay('')}
+              className="obs-action-btn"
+              style={{ fontSize: '12px', padding: '6px 12px' }}
+            >
+              {copiedMilestone === 'default' ? '✓ Kartu Tersalin!' : '📋 Salin Mode Kartu (380x120)'}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleCopyMilestoneOverlay('?theme=bar')}
+              className="obs-action-btn"
+              style={{ fontSize: '12px', padding: '6px 12px' }}
+            >
+              {copiedMilestone === '?theme=bar' ? '✓ Bar Tersalin!' : '📏 Salin Mode Slim Bar (600x45)'}
+            </button>
+            <a
+              href="https://notnot.store/overlay/milestone"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#38bdf8',
+                textDecoration: 'none',
+                fontSize: '12px',
+                fontWeight: '700',
+                padding: '6px 10px',
+                borderRadius: '6px',
+                backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                display: 'inline-flex',
+                alignItems: 'center'
+              }}
+            >
+              ↗ Preview Kartu
+            </a>
+            <a
+              href="https://notnot.store/overlay/milestone?theme=bar"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#38bdf8',
+                textDecoration: 'none',
+                fontSize: '12px',
+                fontWeight: '700',
+                padding: '6px 10px',
+                borderRadius: '6px',
+                backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                display: 'inline-flex',
+                alignItems: 'center'
+              }}
+            >
+              ↗ Preview Slim Bar
+            </a>
+          </div>
+        </div>
+      </form>
 
       {/* Media Share Settings Form Card */}
       <form onSubmit={handleSaveSettings} className="admin-media-settings-card">

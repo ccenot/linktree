@@ -1,0 +1,227 @@
+/* OBS Milestone Viewport (100% Transparent Background) */
+.obs-milestone-viewport {
+  width: 100vw;
+  height: 100vh;
+  background: transparent !important;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  color: #ffffff;
+}
+
+/* Card Container */
+.obs-milestone-card {
+  width: 380px;
+  max-width: 100%;
+  background: rgba(24, 29, 47, 0.94);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(96, 165, 250, 0.35);
+  border-radius: 18px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(49, 58, 98, 0.4);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+/* Header */
+.obs-ms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.obs-ms-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.obs-ms-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 850;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.obs-ms-pct {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: #93c5fd;
+  background: rgba(49, 58, 98, 0.5);
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  padding: 2px 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(49, 58, 98, 0.3);
+}
+
+/* Progress Track & Fill */
+.obs-ms-progress-track {
+  width: 100%;
+  height: 16px;
+  background: rgba(15, 18, 29, 0.8);
+  border: 1px solid rgba(79, 93, 150, 0.3);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.obs-ms-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #313a62 0%, #4d5c9c 40%, #38bdf8 100%);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+}
+
+.obs-ms-progress-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  animation: shimmerBar 2.5s infinite;
+}
+
+@keyframes shimmerBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Footer Amounts */
+.obs-ms-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.obs-ms-current, .obs-ms-target {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.obs-ms-target {
+  align-items: flex-end;
+}
+
+.obs-ms-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.obs-ms-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 850;
+  color: #f8fafc;
+  letter-spacing: -0.2px;
+}
+
+.obs-ms-current .obs-ms-val {
+  color: #93c5fd;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+/* =======================================
+   SLIM BAR THEME (For stream headers/footers)
+   ======================================= */
+.theme-bar .obs-milestone-slim-bar {
+  width: 100%;
+  height: 44px;
+  background: rgba(18, 22, 36, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(96, 165, 250, 0.35);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  box-sizing: border-box;
+}
+
+.theme-bar .slim-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(49, 58, 98, 0.7) 0%, rgba(77, 92, 156, 0.8) 50%, rgba(56, 189, 248, 0.85) 100%);
+  border-radius: 10px;
+  transition: width 0.6s ease;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+.theme-bar .slim-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.theme-bar .slim-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-bar .slim-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.theme-bar .slim-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-bar .slim-amounts {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px;
+  font-weight: 850;
+  color: #f8fafc;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.theme-bar .slim-pct-badge {
+  font-size: 11px;
+  font-weight: 900;
+  background: #313a62;
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  padding: 2px 6px;
+  border-radius: 6px;
+}

@@ -35,6 +35,9 @@ export default function DonatePage({ onBack }) {
     maxDurationSec: 60
   });
 
+  // Milestone State
+  const [milestone, setMilestone] = useState(null);
+
   const fetchLeaderboard = async (period = 'all') => {
     try {
       setLoadingLeaderboard(true);
@@ -55,6 +58,13 @@ export default function DonatePage({ onBack }) {
       .then(res => res.json())
       .then(data => {
         if (data.settings) setSettings(data.settings);
+      })
+      .catch(console.error);
+
+    fetch(`${API_BASE}/api/public/milestone`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.milestone && data.milestone.enabled) setMilestone(data.milestone);
       })
       .catch(console.error);
   }, []);
@@ -200,6 +210,26 @@ export default function DonatePage({ onBack }) {
                 Kirim saweran dengan notifikasi suara TTS & putar media langsung di live stream!
               </p>
             </div>
+
+            {/* Live Milestone Goal Bar (if enabled) */}
+            {milestone && (
+              <div className="donate-milestone-box">
+                <div className="dm-header">
+                  <div className="dm-left">
+                    <FlyingCoinIcon size={20} />
+                    <span className="dm-title">{milestone.title}</span>
+                  </div>
+                  <span className="dm-pct">{milestone.percentage}%</span>
+                </div>
+                <div className="dm-track">
+                  <div className="dm-fill" style={{ width: `${milestone.percentage}%` }}></div>
+                </div>
+                <div className="dm-footer">
+                  <span>Terkumpul: <strong>Rp {milestone.current.toLocaleString('id-ID')}</strong></span>
+                  <span>Target: <strong>Rp {milestone.target.toLocaleString('id-ID')}</strong></span>
+                </div>
+              </div>
+            )}
 
             {/* View Switcher Tabs (Sawer vs Leaderboard) */}
             <div className="donate-tab-switcher">

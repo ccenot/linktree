@@ -6,6 +6,7 @@ import JoinNetwork from './JoinNetwork';
 import DonatePage from './DonatePage';
 import OverlayPage from './OverlayPage';
 import OverlayLeaderboard from './OverlayLeaderboard';
+import OverlayMilestone from './OverlayMilestone';
 import AdminDonations from './AdminDonations';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -732,6 +733,10 @@ function App() {
   }
 
   // ==================== RENDER OBS OVERLAYS ====================
+  if (currentPath === '/overlay/milestone' || currentPath.startsWith('/overlay/milestone')) {
+    return <OverlayMilestone />;
+  }
+
   if (currentPath === '/overlay/leaderboard' || currentPath.startsWith('/overlay/leaderboard')) {
     return <OverlayLeaderboard />;
   }
