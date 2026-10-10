@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './OverlayPage.css';
+import FlyingCoinIcon from './FlyingCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
@@ -174,7 +175,7 @@ export default function OverlayPage() {
           {/* Main Donation Card */}
           <div className="alert-card">
             <div className="alert-coin-bubble">
-              <span className="coin-icon">💰</span>
+              <FlyingCoinIcon size={46} />
             </div>
 
             <div className="alert-body">

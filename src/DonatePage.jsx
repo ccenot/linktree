@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './DonatePage.css';
+import FlyingCoinIcon from './FlyingCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
@@ -213,8 +214,10 @@ export default function DonatePage({ onBack }) {
                 type="button"
                 className={`tab-switch-btn ${activeTab === 'leaderboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('leaderboard')}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                🏆 Top Sultan
+                <FlyingCoinIcon size={20} />
+                <span>Top Sultan</span>
               </button>
             </div>
 
@@ -249,7 +252,7 @@ export default function DonatePage({ onBack }) {
                   <div className="lb-loading">Memuat peringkat sultan...</div>
                 ) : leaderboard.length === 0 ? (
                   <div className="lb-empty">
-                    <span className="lb-empty-icon">👑</span>
+                    <FlyingCoinIcon size={64} className="lb-empty-icon" style={{ margin: '0 auto 12px' }} />
                     <p className="lb-empty-title">Belum ada saweran di periode ini</p>
                     <p className="lb-empty-sub">Jadilah orang pertama yang muncul di Top Leaderboard!</p>
                     <button

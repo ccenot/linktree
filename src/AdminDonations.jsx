@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDonations.css';
+import FlyingCoinIcon from './FlyingCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
@@ -184,8 +185,9 @@ export default function AdminDonations() {
           <button onClick={handleCopyOverlayUrl} className="obs-action-btn">
             {copiedOverlay === true ? '✓ Alert Tersalin!' : '📋 Link Alert OBS'}
           </button>
-          <button onClick={handleCopyLeaderboardOverlay} className="obs-action-btn">
-            {copiedOverlay === 'lb' ? '✓ Leaderboard Tersalin!' : '👑 Link Leaderboard OBS'}
+          <button onClick={handleCopyLeaderboardOverlay} className="obs-action-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <FlyingCoinIcon size={18} />
+            <span>{copiedOverlay === 'lb' ? '✓ Leaderboard Tersalin!' : 'Link Leaderboard OBS'}</span>
           </button>
           <button onClick={handleTestAlert} className="obs-action-btn primary">
             {testStatus || '🔔 Test Alert OBS'}
@@ -218,7 +220,10 @@ export default function AdminDonations() {
       <div className="admin-media-settings-card">
         <div className="media-settings-header">
           <div>
-            <h3 className="media-settings-title">👑 Template & URL Widget OBS Leaderboard</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FlyingCoinIcon size={24} />
+              <h3 className="media-settings-title" style={{ margin: 0 }}>Template & URL Widget OBS Leaderboard</h3>
+            </div>
             <p className="media-settings-desc">Kustomisasi tampilan widget Top Sultan untuk OBS Studio secara langsung (preview real-time).</p>
           </div>
           <button 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './OverlayLeaderboard.css';
+import FlyingCoinIcon from './FlyingCoinIcon';
 
 const API_BASE = 'https://kasir.notnot.store';
 
@@ -82,7 +83,7 @@ export default function OverlayLeaderboard() {
         {/* Header */}
         <div className="obs-lb-header">
           <div className="obs-lb-header-left">
-            <span className="obs-lb-icon">👑</span>
+            <FlyingCoinIcon size={26} className="obs-lb-icon" />
             <span className="obs-lb-title">{title}</span>
           </div>
           <span className="obs-lb-badge">{periodLabel}</span>
