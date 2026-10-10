@@ -561,13 +561,13 @@ export default function AdminDonations() {
               <input
                 type="number"
                 min="5"
-                max="300"
+                max="86400"
                 value={settings.maxDurationSec}
                 onChange={(e) => setSettings(prev => ({ ...prev, maxDurationSec: Number(e.target.value) }))}
               />
               <span>detik</span>
             </div>
-            <small className="field-hint">Maks. {Math.round(settings.maxDurationSec / 60 * 10) / 10} menit</small>
+            <small className="field-hint">Maks. {Math.round(settings.maxDurationSec / 60 * 10) / 10} menit ({settings.maxDurationSec} dtk)</small>
           </div>
 
           <div className="settings-action-col">
