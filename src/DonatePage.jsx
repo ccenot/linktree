@@ -34,6 +34,13 @@ function formatSecondsToTime(totalSec) {
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
+// Helper to extract YouTube Video ID
+function getYouTubeIdFromUrl(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  return match ? match[1] : null;
+}
+
 export default function DonatePage({ onBack }) {
   const [activeTab, setActiveTab] = useState('donate'); // 'donate' | 'leaderboard'
   const [leaderboardPeriod, setLeaderboardPeriod] = useState('all'); // 'all' | 'month' | 'today'
@@ -504,22 +511,55 @@ export default function DonatePage({ onBack }) {
                       const durSec = Math.min(settings.maxDurationSec, Math.floor((finalAmount / 1000) * settings.secPerThousand));
                       const startSec = parseTimeToSeconds(mediaStart);
                       const endSec = startSec + durSec;
+                      const ytId = getYouTubeIdFromUrl(mediaUrl);
+
                       return (
                         <div style={{
                           backgroundColor: '#141827',
                           border: '1px solid rgba(56, 189, 248, 0.3)',
-                          borderRadius: '10px',
-                          padding: '10px 12px',
+                          borderRadius: '12px',
+                          padding: '12px',
                           display: 'flex',
                           flexDirection: 'column',
-                          gap: '3px',
-                          marginTop: '4px'
+                          gap: '8px',
+                          marginTop: '6px'
                         }}>
-                          <span style={{ fontSize: '12.5px', color: '#38bdf8', fontWeight: '700' }}>
-                            ✂️ Custom Cut: {formatSecondsToTime(startSec)} ➔ {formatSecondsToTime(endSec)}
-                          </span>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '12.5px', color: '#38bdf8', fontWeight: '700' }}>
+                              ✂️ Custom Cut: {formatSecondsToTime(startSec)} ➔ {formatSecondsToTime(endSec)}
+                            </span>
+                            <span style={{ fontSize: '11px', color: '#93c5fd', background: 'rgba(49, 58, 98, 0.5)', padding: '2px 8px', borderRadius: '6px' }}>
+                              {durSec} detik
+                            </span>
+                          </div>
+                          
                           <span style={{ fontSize: '11px', color: '#94a3b8' }}>
                             Video diputar selama {durSec} detik ({Math.round(durSec / 60 * 10) / 10} menit) sesuai nominal saweran Rp {finalAmount.toLocaleString('id-ID')}.
+                          </span>
+
+                          {/* Playable Video Preview */}
+                          {ytId && (
+                            <div style={{
+                              width: '100%',
+                              aspectRatio: '16 / 9',
+                              backgroundColor: '#000',
+                              borderRadius: '10px',
+                              overflow: 'hidden',
+                              border: '1px solid rgba(79, 93, 150, 0.4)',
+                              marginTop: '4px'
+                            }}>
+                              <iframe
+                                key={`${ytId}-${startSec}-${endSec}`}
+                                style={{ width: '100%', height: '100%', border: 'none' }}
+                                src={`https://www.youtube-nocookie.com/embed/${ytId}?start=${startSec}&end=${endSec}&controls=1&rel=0`}
+                                title="Pratinjau Hasil Cut"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            </div>
+                          )}
+                          <span style={{ fontSize: '10.5px', color: '#64748b', textAlign: 'center' }}>
+                            👆 Tekan tombol Play di atas untuk cek hasil cut video sebelum bayar
                           </span>
                         </div>
                       );
