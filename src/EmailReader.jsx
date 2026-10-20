@@ -86,7 +86,7 @@ export default function EmailReader({ onBack }) {
     if (!silent) setIsLoading(true);
     setError(null);
 
-    const payload = JSON.stringify({ pin: CORRECT_PIN, top: 25 });
+    const payload = JSON.stringify({ pin: CORRECT_PIN, top: 10 });
     let fetchedData = null;
 
     // 1. Try local same-origin /api/email first
@@ -130,7 +130,8 @@ export default function EmailReader({ onBack }) {
     }
 
     if (fetchedData) {
-      setMessages(fetchedData.messages || []);
+      const limited = (fetchedData.messages || []).slice(0, 10);
+      setMessages(limited);
       setLastUpdated(new Date());
     }
 

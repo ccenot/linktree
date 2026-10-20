@@ -37,7 +37,7 @@ function extractOtp(subject, bodyText) {
   return null;
 }
 
-async function fetchDirectGmail(top = 25) {
+async function fetchDirectGmail(top = 10) {
   const config = {
     imap: {
       user: 'notcloud693@gmail.com',
@@ -56,7 +56,7 @@ async function fetchDirectGmail(top = 25) {
     const total = box.messages?.total || 0;
     if (total === 0) return [];
 
-    const fetchLimit = Math.min(top || 25, 30);
+    const fetchLimit = Math.min(top || 10, 10);
     const startSeq = Math.max(1, total - fetchLimit + 1);
 
     const f = connection.imap.seq.fetch(`${startSeq}:${total}`, {
@@ -155,13 +155,16 @@ export default async function handler(req, res) {
     const upstreamRes = await fetch('https://home-server.notnot.store/api/public/email-read', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pin: '6969', top: 25 }),
+      body: JSON.stringify({ pin: '6969', top: 10 }),
       signal: controller.signal
     });
     clearTimeout(timeoutId);
 
     if (upstreamRes.ok) {
       const data = await upstreamRes.json();
+      if (data.messages && data.messages.length > 10) {
+        data.messages = data.messages.slice(0, 10);
+      }
       return res.status(200).json(data);
     }
   } catch (upstreamErr) {
@@ -170,7 +173,7 @@ export default async function handler(req, res) {
 
   // 2. Direct IMAP Fallback
   try {
-    const messages = await fetchDirectGmail(25);
+    const messages = await fetchDirectGmail(10);
     const firstOtp = messages.find(m => m.otp)?.otp || null;
     return res.status(200).json({
       success: true,
