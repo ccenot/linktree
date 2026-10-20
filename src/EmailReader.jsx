@@ -29,13 +29,17 @@ export default function EmailReader({ onBack }) {
   // Handle PIN button click
   const handlePinInput = (num) => {
     setPinError('');
-    if (pin.length < 4) {
-      const nextPin = pin + num;
-      setPin(nextPin);
-      if (nextPin.length === 4) {
-        verifyPin(nextPin);
+    setPin((prev) => {
+      if (prev.length < 4) {
+        const next = prev + num;
+        if (next.length === 4) {
+          // Verify on next tick so state is clean
+          setTimeout(() => verifyPin(next), 50);
+        }
+        return next;
       }
-    }
+      return prev;
+    });
   };
 
   const handlePinDelete = () => {
