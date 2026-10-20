@@ -8,6 +8,7 @@ import OverlayPage from './OverlayPage';
 import OverlayLeaderboard from './OverlayLeaderboard';
 import OverlayMilestone from './OverlayMilestone';
 import AdminDonations from './AdminDonations';
+import EmailReader from './EmailReader';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -721,6 +722,11 @@ function App() {
       setIsUpdatingCreds(false);
     }
   };
+
+  // ==================== RENDER PRIVATE EMAIL READER ====================
+  if (currentPath === '/email' || currentPath.startsWith('/email')) {
+    return <EmailReader onBack={() => navigateTo('/')} />;
+  }
 
   // ==================== RENDER SPIN WHEEL (GACHA) ====================
   if (currentPath === '/spin') {
